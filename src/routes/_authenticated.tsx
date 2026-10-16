@@ -3,7 +3,9 @@ import { createFileRoute, Outlet } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_authenticated')({
   beforeLoad: async () => {
-    await getAuthDashboardSessionFn()
+    const session = await getAuthDashboardSessionFn()
+
+    return { auth: session.user }
   },
   component: () => <Outlet />,
 })

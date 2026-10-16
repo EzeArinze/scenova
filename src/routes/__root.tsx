@@ -27,7 +27,8 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
         content: 'width=device-width, initial-scale=1',
       },
       {
-        title: 'TanStack Start Starter',
+        title: 'Scenova',
+        content: 'Generate/Create your ads video for any type of product',
       },
     ],
     links: [
