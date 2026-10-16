@@ -15,8 +15,8 @@ export interface ErrorResponse {
 }
 
 export class AppError extends Error {
-  public readonly statusCode: number
-  public readonly code: ErrorCode
+  readonly statusCode: number
+  readonly code: ErrorCode
 
   constructor(
     message: string,
@@ -28,11 +28,6 @@ export class AppError extends Error {
     this.name = this.constructor.name
     this.statusCode = statusCode
     this.code = code
-
-    // Maintains proper stack trace
-    Object.setPrototypeOf(this, new.target.prototype)
-
-    Error.captureStackTrace(this, this.constructor)
   }
 }
 
