@@ -73,7 +73,7 @@ export function Hero() {
             </span>
           </h1>
 
-          <p className="mt-5 max-w-[34rem] animate-rise-in text-lg leading-7 text-muted-foreground [animation-delay:240ms]">
+          <p className="mt-5 max-w-136 animate-rise-in text-lg leading-7 text-muted-foreground [animation-delay:240ms]">
             Upload your product photos and pick a style. Scenova drafts the
             storyboard, you fix any scene, and it renders the finished ad.
           </p>

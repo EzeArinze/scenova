@@ -266,10 +266,10 @@ export function HeroStage() {
       aria-label="Interactive preview: regenerate one scene of an ad"
       onPointerMove={onPointerMove}
       onPointerLeave={onPointerLeave}
-      className="relative mx-auto aspect-[9/12] w-full max-w-[34rem] sm:aspect-[9/11]"
+      className="relative mx-auto aspect-9/12 w-full max-w-136 sm:aspect-9/11"
     >
       <div
-        className="glow-violet pointer-events-none absolute -inset-[14%]"
+        className="glow-violet pointer-events-none absolute inset-[-14%]"
         aria-hidden="true"
       />
 
@@ -287,7 +287,7 @@ export function HeroStage() {
             className="relative aspect-square overflow-hidden rounded-lg"
             style={{ background: 'oklch(97% 0.004 265)' }}
           >
-            <SceneArt tone={TONES[2]} variant="hero" className="!bg-none" />
+            <SceneArt tone={TONES[2]} variant="hero" className="bg-none!" />
           </div>
           <div className="mt-2 flex items-center gap-1.5 px-0.5 pb-0.5">
             <span className="grid size-4 place-items-center rounded-full bg-success text-ink-950">
@@ -308,7 +308,7 @@ export function HeroStage() {
         x={springX}
         y={springY}
       >
-        <div className="aspect-[9/16] rounded-[1.75rem] bg-ink-900 p-[5px] shadow-float">
+        <div className="aspect-9/16 rounded-[1.75rem] bg-ink-900 p-1.25 shadow-float">
           <div className="relative h-full overflow-hidden rounded-[1.4rem]">
             <Crossfade tone={tone} className="absolute inset-0">
               {(t) => <SceneArt tone={t} variant="hero" />}
@@ -324,14 +324,14 @@ export function HeroStage() {
             >
               <div
                 className={cn(
-                  'h-full w-full bg-gradient-to-r from-transparent via-white/50 to-transparent',
+                  'h-full w-full bg-linear-to-r from-transparent via-white/50 to-transparent',
                   busy && 'animate-shimmer',
                 )}
               />
             </div>
 
-            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-ink-900/60 to-transparent" />
-            <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-ink-900/35 to-transparent" />
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-linear-to-t from-ink-900/60 to-transparent" />
+            <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-linear-to-b from-ink-900/35 to-transparent" />
 
             {/* Story-style progress: one segment per scene, scene 2 playing */}
             <div
@@ -341,7 +341,7 @@ export function HeroStage() {
               {[100, 45, 0, 0].map((fill, index) => (
                 <span
                   key={index}
-                  className="h-[3px] flex-1 overflow-hidden rounded-full bg-white/40"
+                  className="h-0.75 flex-1 overflow-hidden rounded-full bg-white/40"
                 >
                   <span
                     className="block h-full rounded-full bg-white"
@@ -356,7 +356,7 @@ export function HeroStage() {
             </span>
 
             {/* Real text and CTA, composited over the clip */}
-            <div className="absolute inset-x-3.5 bottom-[4.5rem] text-white">
+            <div className="absolute inset-x-3.5 bottom-18  text-white">
               <p className="text-[1.25rem] font-bold leading-6 tracking-[-0.02em]">
                 Glow, daily.
               </p>
@@ -392,7 +392,7 @@ export function HeroStage() {
                 <li key={scene.label}>
                   <div
                     className={cn(
-                      'relative aspect-[4/5] overflow-hidden rounded-md',
+                      'relative aspect-4/5 overflow-hidden rounded-md',
                       selected &&
                         'ring-2 ring-primary ring-offset-2 ring-offset-card',
                     )}

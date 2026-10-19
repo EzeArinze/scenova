@@ -183,7 +183,7 @@ export function SceneArt({
       {variant === 'hook' && (
         <BottleArt
           tone={tone}
-          className="absolute -bottom-[8%] left-1/2 w-[120%] -translate-x-1/2"
+          className="absolute bottom-[-8%] left-1/2 w-[120%] -translate-x-1/2"
         />
       )}
       {variant === 'detail' && (

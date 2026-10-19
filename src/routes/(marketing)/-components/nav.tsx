@@ -5,10 +5,6 @@ import { cn } from 'cn'
 import { Button, buttonVariants } from '#/components/ui/button'
 import { Link } from '@tanstack/react-router'
 
-/**
- * Floating translucent nav. Content scrolls underneath the glass.
- * Mobile: a menu panel that scales in from its trigger (top right).
- */
 export function Nav() {
   const [open, setOpen] = useState(false)
   const panelId = useId()
@@ -47,14 +43,14 @@ export function Nav() {
         ref={navRef}
         aria-label="Main"
         className={cn(
-          'relative mx-auto flex h-14 max-w-6xl items-center justify-between gap-4 rounded-2xl pl-4 pr-2',
+          'relative mx-auto flex h-14 max-w-6xl items-center justify-between gap-4 rounded-lg pl-4 pr-2',
           'bg-card/75 shadow-card ring-1 ring-ink-900/5 backdrop-blur-xl backdrop-saturate-150',
           '[@media(prefers-reduced-transparency:reduce)]:bg-card [@media(prefers-reduced-transparency:reduce)]:backdrop-blur-none',
         )}
       >
-        <a href="/" aria-label="Scenova home" className="rounded-lg">
+        <Link to="/" aria-label="Scenova home" className="rounded-lg">
           <Logo />
-        </a>
+        </Link>
 
         <ul className="hidden items-center gap-1 md:flex">
           {siteConfig.nav.map((item) => (
@@ -97,14 +93,14 @@ export function Nav() {
             <span className="relative block size-5" aria-hidden="true">
               <span
                 className={cn(
-                  'absolute left-0 top-[7px] h-0.5 w-5 rounded-full bg-current transition-transform duration-(--duration-base) ease-out',
-                  open && 'translate-y-[2px] rotate-45',
+                  'absolute left-0 top-1.75 h-0.5 w-5 rounded-full bg-current transition-transform duration-(--duration-base) ease-out',
+                  open && 'translate-y-0.5 rotate-45',
                 )}
               />
               <span
                 className={cn(
-                  'absolute left-0 top-[11px] h-0.5 w-5 rounded-full bg-current transition-transform duration-(--duration-base) ease-out',
-                  open && '-translate-y-[2px] -rotate-45',
+                  'absolute left-0 top-2.75 h-0.5 w-5 rounded-full bg-current transition-transform duration-(--duration-base) ease-out',
+                  open && '-translate-y-0.5 -rotate-45',
                 )}
               />
             </span>
