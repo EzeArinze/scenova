@@ -1,7 +1,7 @@
 import { Button } from '#/components/ui/button'
 import { siteConfig } from '#/utils/site-config'
 // import { Button } from './button'
-import { HeroStage } from './hero-stage'
+import { HeroStage } from './hero-stage/hero-stage'
 
 function PlayIcon() {
   return (

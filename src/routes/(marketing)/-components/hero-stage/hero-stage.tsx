@@ -1,214 +1,22 @@
 import { useEffect, useRef, useState } from 'react'
-
-import type {
-  CSSProperties,
-  PointerEvent as ReactPointerEvent,
-  ReactNode,
-} from 'react'
-
-import {
-  motion,
-  useMotionTemplate,
-  useMotionValue,
-  useReducedMotion,
-  useSpring,
-  useTransform,
-} from 'motion/react'
-import type { MotionValue } from 'motion/react'
-import { SceneArt, TONES, toneFor } from './product-art'
-import type { SceneVariant, Tone } from './product-art'
+import type { PointerEvent as ReactPointerEvent } from 'react'
+import { useMotionValue, useReducedMotion, useSpring } from 'motion/react'
+import { SceneArt, TONES, toneFor } from '../product-art'
 import { cn } from 'cn'
 import { Button } from '#/components/ui/button'
+import {
+  cardSurface,
+  FIRST_VERSION,
+  PARALLAX_RANGE,
+  REGENERATE_MS,
+  SCENES,
+  SPRING,
+} from './constants'
+import { Float } from './float'
+import { CheckIcon, RefreshIcon } from './icons'
+import { Crossfade } from './crossfade'
+import { VersionChips } from './version-chips'
 
-const FIRST_VERSION = 3
-const REGENERATE_MS = 1100
-const PARALLAX_RANGE = 1 // multiplied by each layer's depth, in px
-const SPRING = { stiffness: 120, damping: 20, mass: 0.4 }
-
-/* -------------------------------------------------------------------------
-   Crossfade: swaps scene art with a short fade + 2px blur, which hides the
-   two-state overlap better than opacity alone.
-   ------------------------------------------------------------------------- */
-function Crossfade({
-  tone,
-  className,
-  children,
-}: {
-  tone: Tone
-  className?: string
-  children: (tone: Tone) => ReactNode
-}) {
-  const [slots, setSlots] = useState<[Tone, Tone]>([tone, tone])
-  const [active, setActive] = useState<0 | 1>(0)
-
-  useEffect(() => {
-    if (slots[active].name === tone.name) return
-    const next: 0 | 1 = active === 0 ? 1 : 0
-    setSlots((current) => {
-      const copy: [Tone, Tone] = [current[0], current[1]]
-      copy[next] = tone
-      return copy
-    })
-    setActive(next)
-  }, [tone, slots, active])
-
-  return (
-    <div className={className}>
-      {([0, 1] as const).map((index) => (
-        <div
-          key={index}
-          aria-hidden="true"
-          className={cn(
-            'absolute inset-0 transition-[opacity,filter] duration-(--duration-slow) ease-out',
-            active === index ? 'opacity-100 blur-0' : 'opacity-0 blur-[2px]',
-          )}
-        >
-          {children(slots[index])}
-        </div>
-      ))}
-    </div>
-  )
-}
-
-/* -------------------------------------------------------------------------
-   Layout helpers. Three nested elements keep three kinds of motion apart:
-   outer = position + entrance animation, middle = static tilt,
-   inner = cursor parallax. Each owns a different `transform`.
-   ------------------------------------------------------------------------- */
-function Parallax({
-  depth,
-  x,
-  y,
-  children,
-}: {
-  depth: number
-  x: MotionValue<number>
-  y: MotionValue<number>
-  children: ReactNode
-}) {
-  const tx = useTransform(x, (value) => value * depth)
-  const ty = useTransform(y, (value) => value * depth)
-  const transform = useMotionTemplate`translate3d(${tx}px, ${ty}px, 0)`
-  return <motion.div style={{ transform }}>{children}</motion.div>
-}
-
-function Float({
-  className,
-  delay,
-  depth,
-  tilt = 0,
-  entrance = 'animate-pop-in',
-  x,
-  y,
-  children,
-}: {
-  className: string
-  delay: number
-  depth: number
-  tilt?: number
-  entrance?: 'animate-pop-in' | 'animate-rise-in'
-  x: MotionValue<number>
-  y: MotionValue<number>
-  children: ReactNode
-}) {
-  return (
-    <div
-      className={cn('absolute [animation-delay:var(--d)]', entrance, className)}
-      style={{ '--d': `${delay}ms` } as CSSProperties}
-    >
-      <div style={{ transform: tilt ? `rotate(${tilt}deg)` : undefined }}>
-        <Parallax depth={depth} x={x} y={y}>
-          {children}
-        </Parallax>
-      </div>
-    </div>
-  )
-}
-
-/* -------------------------------------------------------------------------
-   Small pieces
-   ------------------------------------------------------------------------- */
-const cardSurface = 'bg-card shadow-raised ring-1 ring-ink-900/5'
-
-function CheckIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      viewBox="0 0 16 16"
-      className={className}
-      fill="none"
-      aria-hidden="true"
-    >
-      <path
-        d="m3.5 8.5 3 3 6-7"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  )
-}
-
-function RefreshIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      viewBox="0 0 16 16"
-      className={className}
-      fill="none"
-      aria-hidden="true"
-    >
-      <path
-        d="M13.5 8a5.5 5.5 0 1 1-1.8-4.07M13.5 2.5v3h-3"
-        stroke="currentColor"
-        strokeWidth="1.6"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  )
-}
-
-const SCENES: Array<{
-  label: string
-  tone: Tone
-  variant: SceneVariant
-}> = [
-  { label: 'Hook', tone: TONES[1], variant: 'hook' },
-  { label: 'Benefits', tone: TONES[2], variant: 'detail' }, // replaced by live scene 2
-  { label: 'Lifestyle', tone: TONES[3], variant: 'detail' },
-  { label: 'CTA', tone: TONES[0], variant: 'cta' },
-]
-
-function VersionChips({ version }: { version: number }) {
-  const shown = [version - 2, version - 1, version].filter(
-    (value) => value >= 1,
-  )
-  return (
-    <ul
-      className="flex items-center gap-1"
-      aria-label="Saved versions of scene 2"
-    >
-      {shown.map((value) => (
-        <li
-          key={value}
-          aria-current={value === version ? 'true' : undefined}
-          className={cn(
-            'animate-pop-in rounded-pill px-2 py-0.5 text-[0.6875rem] font-semibold leading-4',
-            value === version
-              ? 'bg-primary text-primary-foreground'
-              : 'bg-muted text-muted-foreground',
-          )}
-        >
-          v{value}
-        </li>
-      ))}
-    </ul>
-  )
-}
-
-/* -------------------------------------------------------------------------
-   The stage
-   ------------------------------------------------------------------------- */
 export function HeroStage() {
   const reduceMotion = useReducedMotion()
 
@@ -421,7 +229,7 @@ export function HeroStage() {
           </ol>
 
           <div className="mt-2.5 flex items-center gap-2.5">
-            <div className="relative">
+            <div className="relative border-none">
               <Button
                 size="sm"
                 variant="secondary"
@@ -437,10 +245,10 @@ export function HeroStage() {
               {/* One-time ring that says "this is clickable" */}
               <span
                 aria-hidden="true"
-                className="pointer-events-none absolute inset-0 animate-nudge rounded-pill border-2 border-primary/50 [animation-delay:2200ms]"
+                className="pointer-events-none absolute inset-0 animate-nudge rounded-md border-2 border-primary/50 [animation-delay:2200ms]"
               />
             </div>
-            <p className="hidden text-label text-muted-foreground min-[420px]:block">
+            <p className="hidden text-sm text-muted-foreground min-[420px]:block">
               Earlier versions stay saved.
             </p>
           </div>

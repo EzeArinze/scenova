@@ -57,7 +57,7 @@ export function Nav() {
             <li key={item.href}>
               <a
                 href={item.href}
-                className="rounded-pill px-3.5 py-2 text-small text-muted-foreground transition-colors duration-(--duration-fast) hover-fine:bg-muted hover-fine:text-foreground"
+                className="rounded-md px-3.5 py-2 text-small text-muted-foreground transition-colors duration-(--duration-fast) hover-fine:bg-muted hover-fine:text-foreground"
               >
                 {item.label}
               </a>
@@ -72,7 +72,7 @@ export function Nav() {
               buttonVariants({
                 variant: 'ghost',
                 size: 'lg',
-                className: 'max-sm:hidden hover:bg-primary-foreground',
+                className: 'max-sm:hidden',
               }),
             )}
           >
