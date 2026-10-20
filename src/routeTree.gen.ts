@@ -9,21 +9,26 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
+import { Route as marketingRouteRouteImport } from './routes/(marketing)/route'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
+import { Route as marketingIndexRouteImport } from './routes/(marketing)/index'
 import { Route as authSigninIndexRouteImport } from './routes/(auth)/signin/index'
 import { Route as authSignupIndexRouteImport } from './routes/(auth)/signup/index'
 import { Route as AuthenticatedDashboardIndexRouteImport } from './routes/_authenticated/dashboard/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const marketingRouteRoute = marketingRouteRouteImport.update({
+  id: '/(marketing)',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedRoute = AuthenticatedRouteImport.update({
   id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
+} as any)
+const marketingIndexRoute = marketingIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => marketingRouteRoute,
 } as any)
 const authSigninIndexRoute = authSigninIndexRouteImport.update({
   id: '/(auth)/signin/',
@@ -48,14 +53,14 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
+  '/': typeof marketingIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/signin/': typeof authSigninIndexRoute
   '/signup/': typeof authSignupIndexRoute
   '/dashboard/': typeof AuthenticatedDashboardIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
+  '/': typeof marketingIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/signin': typeof authSigninIndexRoute
   '/signup': typeof authSignupIndexRoute
@@ -63,8 +68,9 @@ export interface FileRoutesByTo {
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
+  '/(marketing)': typeof marketingRouteRouteWithChildren
   '/_authenticated': typeof AuthenticatedRouteWithChildren
+  '/(marketing)/': typeof marketingIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/(auth)/signin/': typeof authSigninIndexRoute
   '/(auth)/signup/': typeof authSignupIndexRoute
@@ -77,8 +83,9 @@ export interface FileRouteTypes {
   to: '/' | '/api/auth/$' | '/signin' | '/signup' | '/dashboard'
   id:
     | '__root__'
-    | '/'
+    | '/(marketing)'
     | '/_authenticated'
+    | '/(marketing)/'
     | '/api/auth/$'
     | '/(auth)/signin/'
     | '/(auth)/signup/'
@@ -86,7 +93,7 @@ export interface FileRouteTypes {
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
+  marketingRouteRoute: typeof marketingRouteRouteWithChildren
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
   authSigninIndexRoute: typeof authSigninIndexRoute
@@ -95,11 +102,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/(marketing)': {
+      id: '/(marketing)'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof marketingRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated': {
@@ -108,6 +115,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof AuthenticatedRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/(marketing)/': {
+      id: '/(marketing)/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof marketingIndexRouteImport
+      parentRoute: typeof marketingRouteRoute
     }
     '/(auth)/signin/': {
       id: '/(auth)/signin/'
@@ -140,6 +154,18 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface marketingRouteRouteChildren {
+  marketingIndexRoute: typeof marketingIndexRoute
+}
+
+const marketingRouteRouteChildren: marketingRouteRouteChildren = {
+  marketingIndexRoute: marketingIndexRoute,
+}
+
+const marketingRouteRouteWithChildren = marketingRouteRoute._addFileChildren(
+  marketingRouteRouteChildren,
+)
+
 interface AuthenticatedRouteChildren {
   AuthenticatedDashboardIndexRoute: typeof AuthenticatedDashboardIndexRoute
 }
@@ -153,7 +179,7 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
 )
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
+  marketingRouteRoute: marketingRouteRouteWithChildren,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
   authSigninIndexRoute: authSigninIndexRoute,
