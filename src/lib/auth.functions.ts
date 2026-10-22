@@ -22,9 +22,5 @@ export const getAuthDashboardSessionFn = createServerFn({
   const headers = getRequestHeaders()
   const session = await auth.api.getSession({ headers })
 
-  if (!session) {
-    throw redirect({ to: '/signin' })
-  }
-
   return session
 })
