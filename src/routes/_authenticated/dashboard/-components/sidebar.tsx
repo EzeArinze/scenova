@@ -1,12 +1,4 @@
-import { Link, linkOptions } from '@tanstack/react-router'
-import {
-  Clapperboard,
-  Film,
-  Images,
-  LayoutDashboard,
-  LayoutTemplate,
-  UserRound,
-} from 'lucide-react'
+import { Link } from '@tanstack/react-router'
 import type { LucideIcon } from 'lucide-react'
 import {
   Sidebar,
@@ -18,34 +10,11 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarRail,
+  // SidebarRail,
 } from '@/components/ui/sidebar'
 import { Logo } from '#/routes/(marketing)/-components/logo'
 import { cn } from 'cn'
-
-const NAV = [
-  {
-    label: 'Create',
-    items: linkOptions([
-      {
-        to: '/dashboard',
-        label: 'Overview',
-        icon: LayoutDashboard,
-        activeOptions: { exact: true },
-      },
-      { to: '/', label: 'New video', icon: Clapperboard },
-      { to: '/', label: 'Projects', icon: Film },
-    ]),
-  },
-  {
-    label: 'Library',
-    items: linkOptions([
-      { to: '/', label: 'Templates', icon: LayoutTemplate },
-      { to: '/', label: 'Creators', icon: UserRound },
-      { to: '/', label: 'Assets', icon: Images },
-    ]),
-  },
-]
+import { NAV } from '#/utils/dashboard-contants'
 
 // The raised square behind each icon, as in the reference.
 function IconTile({ icon: Icon }: { icon: LucideIcon }) {
@@ -78,6 +47,7 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
               </SidebarGroupLabel>
               <SidebarGroupContent>
                 <SidebarMenu className="gap-1">
+                  {/* Change the key here to use link.to instead of index*/}
                   {group.items.map(({ label, icon, ...link }, index) => (
                     <SidebarMenuItem key={index}>
                       <SidebarMenuButton
@@ -106,7 +76,7 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
         ))}
       </SidebarContent>
 
-      <SidebarRail />
+      {/* <SidebarRail />*/}
     </Sidebar>
   )
 }
