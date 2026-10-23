@@ -1,7 +1,8 @@
 import { getRequestHeaders } from '@tanstack/react-start/server'
-import { auth } from './auth'
+import { auth } from '../auth'
 import { createServerFn } from '@tanstack/react-start'
 import { redirect } from '@tanstack/react-router'
+import { magicLinkSchema } from '#/z-schemas/auth.schema'
 
 export const getAuthSessionFn = createServerFn({ method: 'GET' }).handler(
   async () => {
@@ -24,3 +25,25 @@ export const getAuthDashboardSessionFn = createServerFn({
 
   return session
 })
+
+// MAGIC LINK
+export const magicLink = createServerFn({
+  method: 'POST',
+})
+  .validator(magicLinkSchema)
+  .handler(async ({ data }) => {
+    const { callbackURL, email, name } = data
+
+    const headers = getRequestHeaders()
+
+    const { status } = await auth.api.signInMagicLink({
+      body: {
+        email,
+        name,
+        callbackURL,
+      },
+      headers,
+    })
+
+    return status
+  })
