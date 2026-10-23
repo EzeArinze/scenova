@@ -1,63 +1,49 @@
-import { useEffect, useId, useRef, useState } from 'react'
 import { Logo } from './logo'
 import { siteConfig } from '#/utils/site-config'
 import { cn } from 'cn'
-import { Button, buttonVariants } from '#/components/ui/button'
+import { buttonVariants } from '#/components/ui/button'
 import { Link } from '@tanstack/react-router'
+import { UserDropdown } from '#/components/user-dropdown'
+import { Avatar, AvatarFallback, AvatarImage } from '#/components/ui/avatar'
+import { Skeleton } from '#/components/ui/skeleton'
+import { useAuthSession } from '#/hooks/use-auth-session'
 
 export function Nav() {
-  const [open, setOpen] = useState(false)
-  const panelId = useId()
-  const navRef = useRef<HTMLElement>(null)
-
-  // Close on Escape, on outside press, and when the viewport grows past mobile.
-  useEffect(() => {
-    if (!open) return
-
-    const onKey = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') setOpen(false)
-    }
-    const onPointerDown = (event: PointerEvent) => {
-      if (navRef.current && !navRef.current.contains(event.target as Node)) {
-        setOpen(false)
-      }
-    }
-    const desktop = window.matchMedia('(min-width: 768px)')
-    const onChange = () => {
-      if (desktop.matches) setOpen(false)
-    }
-
-    document.addEventListener('keydown', onKey)
-    document.addEventListener('pointerdown', onPointerDown)
-    desktop.addEventListener('change', onChange)
-    return () => {
-      document.removeEventListener('keydown', onKey)
-      document.removeEventListener('pointerdown', onPointerDown)
-      desktop.removeEventListener('change', onChange)
-    }
-  }, [open])
+  const { isAuthenticated, isPending, user, avatarUrl, initials } =
+    useAuthSession()
 
   return (
     <header className="fixed inset-x-0 top-3 z-50 animate-drop-in px-3 sm:px-4">
       <nav
-        ref={navRef}
-        aria-label="Main"
+        aria-label="Main navigation"
         className={cn(
-          'relative mx-auto flex h-14 max-w-6xl items-center justify-between gap-4 rounded-lg pl-4 pr-2',
-          'bg-card/75 shadow-card ring-1 ring-ink-900/5 backdrop-blur-xl backdrop-saturate-150',
-          '[@media(prefers-reduced-transparency:reduce)]:bg-card [@media(prefers-reduced-transparency:reduce)]:backdrop-blur-none',
+          'relative mx-auto flex h-14 max-w-6xl items-center justify-between gap-3 rounded-xl px-3 sm:px-4',
+          'border border-border/70 bg-card/85 shadow-card backdrop-blur-xl backdrop-saturate-150',
+          'supports-backdrop-filter:bg-card/75',
+          'motion-reduce:animate-none',
         )}
       >
-        <Link to="/" aria-label="Scenova home" className="rounded-lg">
+        {/* Brand */}
+        <Link
+          to="/"
+          aria-label="Scenova home"
+          className="shrink-0 rounded-lg outline-none transition-opacity hover:opacity-80 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+        >
           <Logo />
         </Link>
 
+        {/* Desktop navigation */}
         <ul className="hidden items-center gap-1 md:flex">
           {siteConfig.nav.map((item) => (
             <li key={item.href}>
               <a
                 href={item.href}
-                className="rounded-md px-3.5 py-2 text-small text-muted-foreground transition-colors duration-(--duration-fast) hover-fine:bg-muted hover-fine:text-foreground"
+                className={cn(
+                  'relative rounded-lg px-3 py-2 text-small font-medium text-muted-foreground',
+                  'transition-colors duration-200',
+                  'hover:bg-muted/70 hover:text-foreground',
+                  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+                )}
               >
                 {item.label}
               </a>
@@ -65,82 +51,141 @@ export function Nav() {
           ))}
         </ul>
 
-        <div className="flex items-center gap-1.5">
+        {/* Actions */}
+        <div className="flex shrink-0 items-center gap-1.5">
+          {isPending ? (
+            <Skeleton className="size-9 rounded-full" />
+          ) : isAuthenticated && user ? (
+            <UserDropdown
+              align="center"
+              trigger={
+                <div
+                  aria-label="Open account menu"
+                  className="rounded-full outline-none transition-transform duration-200 hover:scale-[1.04] focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                >
+                  <Avatar className="size-9">
+                    <AvatarImage src={avatarUrl} alt={user.name} />
+                    <AvatarFallback>{initials}</AvatarFallback>
+                  </Avatar>
+                </div>
+              }
+              session={{ user, initials, avatarUrl }}
+            />
+          ) : (
+            <Link
+              to="/signin"
+              className={cn(
+                buttonVariants({
+                  variant: 'ghost',
+                  size: 'lg',
+                  className: 'hidden sm:inline-flex',
+                }),
+              )}
+            >
+              {siteConfig.login.label}
+            </Link>
+          )}
+
           <Link
-            to="/signin"
+            to="/dashboard"
             className={cn(
-              buttonVariants({
-                variant: 'ghost',
-                size: 'lg',
-                className: 'max-sm:hidden',
-              }),
+              buttonVariants({ size: 'lg' }),
+              'hidden sm:inline-flex h-10 rounded-lg px-3.5 text-sm font-semibold shadow-sm',
+              'transition-[transform,box-shadow] duration-200',
+              'hover:shadow-md active:scale-[0.98]',
             )}
           >
-            {siteConfig.login.label}
-          </Link>
-          <Link to="/dashboard" className={cn(buttonVariants({ size: 'lg' }))}>
             {siteConfig.cta.label}
           </Link>
 
-          <button
-            type="button"
-            aria-expanded={open}
-            aria-controls={panelId}
-            aria-label={open ? 'Close menu' : 'Open menu'}
-            onClick={() => setOpen((value) => !value)}
-            className="grid size-10 place-items-center rounded-pill transition-[transform,background-color] duration-(--duration-fast) ease-out active:scale-[0.95] hover-fine:bg-muted md:hidden"
-          >
-            <span className="relative block size-5" aria-hidden="true">
-              <span
-                className={cn(
-                  'absolute left-0 top-1.75 h-0.5 w-5 rounded-full bg-current transition-transform duration-(--duration-base) ease-out',
-                  open && 'translate-y-0.5 rotate-45',
-                )}
-              />
-              <span
-                className={cn(
-                  'absolute left-0 top-2.75 h-0.5 w-5 rounded-full bg-current transition-transform duration-(--duration-base) ease-out',
-                  open && '-translate-y-0.5 -rotate-45',
-                )}
-              />
-            </span>
-          </button>
-        </div>
-
-        <div
-          id={panelId}
-          className={cn(
-            'absolute inset-x-0 top-[calc(100%+0.5rem)] origin-top-right rounded-2xl bg-card p-2 shadow-float ring-1 ring-ink-900/5 md:hidden',
-            'transition-[opacity,transform,visibility] ease-out',
-            open
-              ? 'visible scale-100 opacity-100 duration-(--duration-base)'
-              : 'invisible scale-[0.97] opacity-0 duration-(--duration-fast)',
-          )}
-        >
-          <ul>
-            {siteConfig.nav.map((item) => (
-              <li key={item.href}>
-                <a
-                  href={item.href}
-                  onClick={() => setOpen(false)}
-                  className="block rounded-xl px-4 py-3 text-body font-medium transition-colors duration-(--duration-fast) hover-fine:bg-muted"
-                >
-                  {item.label}
-                </a>
-              </li>
-            ))}
-          </ul>
-          <div className="mt-1 border-t border-border p-2 pt-3 sm:hidden">
-            <Button
-              // href={siteConfig.login.href}
-              variant="secondary"
-              size="lg"
-              className="w-full"
-              onClick={() => setOpen(false)}
+          {/* Native mobile menu: no React state or effects */}
+          <details className="group relative md:hidden">
+            <summary
+              aria-label="Toggle navigation menu"
+              className={cn(
+                'grid size-10 cursor-pointer list-none place-items-center rounded-lg',
+                'transition-colors duration-200 hover:bg-muted',
+                'active:scale-95',
+                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+                '[&::-webkit-details-marker]:hidden',
+              )}
             >
-              {siteConfig.login.label}
-            </Button>
-          </div>
+              <span className="relative block size-5" aria-hidden="true">
+                <span
+                  className={cn(
+                    'absolute left-0 top-1.5 h-0.5 w-5 rounded-full bg-current',
+                    'transition-[transform,top] duration-200 ease-out',
+                    'group-open:top-2.25 group-open:rotate-45',
+                    'motion-reduce:transition-none',
+                  )}
+                />
+                <span
+                  className={cn(
+                    'absolute left-0 top-3.25] h-0.5 w-5 rounded-full bg-current',
+                    'transition-[transform,top] duration-200 ease-out',
+                    'group-open:top-2.25 group-open:-rotate-45',
+                    'motion-reduce:transition-none',
+                  )}
+                />
+              </span>
+            </summary>
+
+            <div
+              className={cn(
+                'absolute right-0 top-[calc(100%+0.75rem)] w-[min(20rem,calc(100vw-1.5rem))]',
+                'origin-top-right rounded-2xl border border-border/70 bg-card p-2',
+                'shadow-float',
+                'animate-in fade-in-0 zoom-in-95 duration-150',
+                'motion-reduce:animate-none',
+              )}
+            >
+              <ul className="space-y-1">
+                {siteConfig.nav.map((item) => (
+                  <li key={item.href}>
+                    <a
+                      href={item.href}
+                      onClick={(event) => {
+                        event.currentTarget
+                          .closest('details')
+                          ?.removeAttribute('open')
+                      }}
+                      className={cn(
+                        'flex min-h-11 items-center rounded-xl px-3.5 py-2.5',
+                        'text-sm font-medium text-muted-foreground',
+                        'transition-colors duration-150',
+                        'hover:bg-muted hover:text-foreground',
+                        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+                      )}
+                    >
+                      {item.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+
+              {!isPending && !isAuthenticated && (
+                <div className="mt-2 border-t border-border pt-2 sm:hidden">
+                  <Link
+                    to="/signin"
+                    onClick={(event) => {
+                      event.currentTarget
+                        .closest('details')
+                        ?.removeAttribute('open')
+                    }}
+                    className={cn(
+                      buttonVariants({
+                        variant: 'secondary',
+                        size: 'lg',
+                      }),
+                      'w-full rounded-xl',
+                    )}
+                  >
+                    {siteConfig.login.label}
+                  </Link>
+                </div>
+              )}
+            </div>
+          </details>
         </div>
       </nav>
     </header>

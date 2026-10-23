@@ -9,7 +9,7 @@ export const getAuthSessionFn = createServerFn({ method: 'GET' }).handler(
     const session = await auth.api.getSession({ headers })
 
     if (session) {
-      throw redirect({ to: '/' })
+      throw redirect({ to: '/dashboard' })
     }
   },
 )
