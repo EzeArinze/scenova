@@ -3,20 +3,23 @@ import {
   useCallback,
   useEffect,
   useRef,
-  useState,
-  type MouseEvent,
+  useState
+  
 } from "react"
-import Image, { type StaticImageData } from "next/image"
+import type {MouseEvent} from "react";
+import Image from "next/image"
+import type {StaticImageData} from "next/image";
 import clsx from "clsx"
 import {
   AnimatePresence,
   motion,
   useMotionTemplate,
-  useMotionValue,
-  type MotionStyle,
-  type MotionValue,
-  type Variants,
+  useMotionValue
+  
+  
+  
 } from "motion/react"
+import type {MotionStyle, MotionValue, Variants} from "motion/react";
 import Balancer from "react-wrap-balancer"
 
 import { cn } from "#/lib/utils.ts"
