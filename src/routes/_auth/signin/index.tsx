@@ -4,7 +4,7 @@ import { AuthRings } from '../-components/auth-ring'
 import { AuthLayout } from '../-components/auth-layout'
 import BackToHomeLink from '../-components/back-to-home-link'
 
-export const Route = createFileRoute('/(auth)/signin/')({
+export const Route = createFileRoute('/_auth/signin/')({
   component: RouteComponent,
 })
 

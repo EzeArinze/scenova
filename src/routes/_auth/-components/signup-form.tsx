@@ -8,71 +8,11 @@ import {
 } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
 import { Link } from '@tanstack/react-router'
-// import { useTransition } from 'react'
-// import type { SyntheticEvent } from 'react'
-// import { authClient } from '#/lib/auth-client'
-// import { toast } from '#/components/ui/toast'
-// import { signUpCheck } from '#/z-schemas/auth.schema'
-// import type { Provider } from '#/lib/auth/types'
 import { useAuthActions } from '#/hooks/use-auth-actions'
 
 export function SignupForm() {
-  // const [isPending, startTransition] = useTransition()
-  // const [magicLinkPending, startMagicLink] = useTransition()
-
   const { handleSubmit, signUpWithProvider, isPending, magicLinkPending } =
     useAuthActions({ authActionType: 'signup' })
-
-  // const signUpWithProvider = (provider: Provider) => {
-  //   startTransition(async () => {
-  //     await authClient.signIn.social({
-  //       provider,
-  //       callbackURL: '/dashboard',
-  //       fetchOptions: {
-  //         onError: ({ error }) => {
-  //           toast.add({
-  //             type: 'error',
-  //             description: error.message,
-  //           })
-  //         },
-  //       },
-  //     })
-  //   })
-  // }
-
-  // const handleSubmit = (event: SyntheticEvent<HTMLFormElement>) => {
-  //   event.preventDefault()
-
-  //   const formData = new FormData(event.currentTarget)
-
-  //   const name = String(formData.get('name')).trim()
-  //   const email = String(formData.get('email')).trim()
-
-  //   const validate = signUpCheck.safeParse({ email, name })
-  //   if (!validate.success) {
-  //     toast.add({
-  //       type: 'warning',
-  //       description: 'Please provide input data',
-  //     })
-  //     return
-  //   }
-
-  //   startMagicLink(async () => {
-  //     await authClient.signIn.magicLink({
-  //       email,
-  //       name,
-  //       callbackURL: '/dashboard',
-  //       fetchOptions: {
-  //         onError: ({ error }) => {
-  //           toast.add({
-  //             type: 'error',
-  //             description: error.message,
-  //           })
-  //         },
-  //       },
-  //     })
-  //   })
-  // }
 
   const isPendingState = isPending || magicLinkPending
 
