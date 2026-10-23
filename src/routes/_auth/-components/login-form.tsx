@@ -17,7 +17,10 @@ export function LoginForm() {
   const isPendingState = isPending || magicLinkPending
 
   return (
-    <form className="p-6 md:p-8" onSubmit={handleSubmit}>
+    <form
+      className="flex items-center justify-center p-6 md:p-8"
+      onSubmit={handleSubmit}
+    >
       <FieldGroup>
         <div className="flex flex-col items-center gap-2 text-center">
           <h1 className="text-2xl font-bold">Welcome back</h1>

@@ -1,6 +1,6 @@
-import { Button } from '#/components/ui/button'
+import { Button, buttonVariants } from '#/components/ui/button'
 import { siteConfig } from '#/utils/site-config'
-// import { Button } from './button'
+import { Link } from '@tanstack/react-router'
 import { HeroStage } from './hero-stage/hero-stage'
 
 function PlayIcon() {
@@ -75,9 +75,12 @@ export function Hero() {
         </p>
 
         <div className="mt-8 flex animate-rise-in flex-wrap items-center gap-3 [animation-delay:300ms]">
-          <Button size="lg" className={'text-center'}>
+          <Link
+            to="/signup"
+            className={buttonVariants({ size: 'lg', className: 'text-center' })}
+          >
             {siteConfig.cta.label}
-          </Button>
+          </Link>
           <Button size="lg" variant="secondary">
             <PlayIcon />
             {siteConfig.demo.label}

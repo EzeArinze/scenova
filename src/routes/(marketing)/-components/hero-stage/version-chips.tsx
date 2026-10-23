@@ -14,7 +14,7 @@ export function VersionChips({ version }: { version: number }) {
           key={value}
           aria-current={value === version ? 'true' : undefined}
           className={cn(
-            'animate-pop-in rounded-pill px-2 py-0.5 text-[0.6875rem] font-semibold leading-4',
+            'animate-pop-in rounded-md px-2 py-0.5 text-[0.6875rem] font-semibold leading-4',
             value === version
               ? 'bg-primary text-primary-foreground'
               : 'bg-muted text-muted-foreground',

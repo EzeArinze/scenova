@@ -54,14 +54,14 @@ export function Nav() {
         {/* Actions */}
         <div className="flex shrink-0 items-center gap-1.5">
           {isPending ? (
-            <Skeleton className="size-9 rounded-full" />
+            <Skeleton className="size-9" />
           ) : isAuthenticated && user ? (
             <UserDropdown
               align="center"
               trigger={
                 <div
                   aria-label="Open account menu"
-                  className="rounded-full outline-none transition-transform duration-200 hover:scale-[1.04] focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                  className="outline-none transition-transform duration-200 hover:scale-[1.04] focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                 >
                   <Avatar className="size-9">
                     <AvatarImage src={avatarUrl} alt={user.name} />
@@ -121,7 +121,7 @@ export function Nav() {
                 />
                 <span
                   className={cn(
-                    'absolute left-0 top-3.25] h-0.5 w-5 rounded-full bg-current',
+                    'absolute left-0 top-3.25 h-0.5 w-5 rounded-full bg-current',
                     'transition-[transform,top] duration-200 ease-out',
                     'group-open:top-2.25 group-open:-rotate-45',
                     'motion-reduce:transition-none',

@@ -9,12 +9,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { CircleUserRound, CreditCard, LogOut } from 'lucide-react'
+import { CircleUserRound, LogOut } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { authClient } from '#/lib/auth-client'
 import { Link, useNavigate } from '@tanstack/react-router'
-import type { User } from '#/integrations/get-auth-session'
 import { toast } from './ui/toast'
+import type { User } from '#/hooks/use-auth-session'
 
 type Props = {
   trigger: ReactElement
@@ -36,7 +36,6 @@ type MenuItem = {
 
 const PROFILE_ITEMS: MenuItem[] = [
   { label: 'Dashboard', icon: CircleUserRound, href: '/dashboard' },
-  { label: 'My Subscription', icon: CreditCard, href: '/#' },
 ]
 
 const LOGOUT_ITEM: MenuItem = {
@@ -84,7 +83,7 @@ export function UserDropdown({
 
         <DropdownMenuContent
           align={align}
-          className="w-3xs rounded-2xl data-open:slide-in-from-bottom-20! data-closed:slide-out-to-bottom-20 data-open:fade-in-0 data-closed:fade-out-0 data-closed:zoom-out-100 duration-400"
+          className="w-3xs data-open:slide-in-from-bottom-20! data-closed:slide-out-to-bottom-20 data-open:fade-in-0 data-closed:fade-out-0 data-closed:zoom-out-100 duration-400"
         >
           <DropdownMenuGroup>
             {/* User Info */}

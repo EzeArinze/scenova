@@ -1,6 +1,8 @@
 import { Link } from '@tanstack/react-router'
 import { motion, useReducedMotion } from 'motion/react'
 import { ArrowUpRight } from 'lucide-react'
+import { buttonVariants } from '#/components/ui/button'
+import { cn } from 'cn'
 
 const BRAND = 'scenova'
 
@@ -45,17 +47,20 @@ export function Footer() {
         <p className="mt-4 max-w-[44ch] text-base text-muted-foreground">
           {CTA.body}
         </p>
-        <a
-          href={CTA.href}
-          className={
-            'mt-8 inline-flex h-10 items-center justify-center rounded-md bg-foreground px-5 ' +
-            'text-sm font-medium text-background ' +
-            'transition-transform duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] ' +
-            'active:scale-[0.97]'
-          }
+
+        <Link
+          to={CTA.href}
+          className={buttonVariants({
+            className: cn(
+              'mt-8 inline-flex h-11 items-center justify-center px-5',
+              'text-sm font-medium text-background',
+              'transition-transform duration-150 ease-[cubic-bezier(0.23,1,0.32,1)]',
+              'active:scale-[0.97]',
+            ),
+          })}
         >
           {CTA.label}
-        </a>
+        </Link>
 
         {/* Links */}
         <nav aria-label="Footer" className="mt-16">

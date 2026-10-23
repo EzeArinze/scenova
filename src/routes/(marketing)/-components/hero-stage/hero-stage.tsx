@@ -184,7 +184,7 @@ export function HeroStage() {
         x={springX}
         y={springY}
       >
-        <div className={cn('rounded-2xl p-3', cardSurface)}>
+        <div className={cn('rounded-lg p-3', cardSurface)}>
           <div className="flex items-center justify-between gap-2">
             <p className="text-label font-semibold">Scene 2 of 4</p>
             <VersionChips version={version} />
@@ -265,7 +265,7 @@ export function HeroStage() {
       >
         <div
           className={cn(
-            'flex items-center gap-2.5 rounded-2xl px-3 py-2.5',
+            'flex items-center gap-2.5 rounded-lg px-3 py-2.5',
             cardSurface,
           )}
           aria-hidden="true"

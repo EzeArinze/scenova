@@ -14,3 +14,5 @@ export function useAuthSession() {
     isPending,
   }
 }
+
+export type User = NonNullable<ReturnType<typeof useAuthSession>['user']>
