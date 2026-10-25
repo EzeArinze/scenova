@@ -3,6 +3,7 @@ import type { LucideIcon } from 'lucide-react'
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
@@ -10,11 +11,14 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  // SidebarRail,
 } from '@/components/ui/sidebar'
 import { Logo } from '#/routes/(marketing)/-components/logo'
 import { cn } from 'cn'
 import { NAV } from '#/utils/dashboard-contants'
+import type { User } from '#/hooks/use-auth-session'
+import { SideBarUser } from './user-dropdown'
+
+type IAppProps = React.ComponentProps<typeof Sidebar> & { user: User }
 
 // The raised square behind each icon, as in the reference.
 function IconTile({ icon: Icon }: { icon: LucideIcon }) {
@@ -25,7 +29,7 @@ function IconTile({ icon: Icon }: { icon: LucideIcon }) {
   )
 }
 
-export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
+export function AppSidebar(props: IAppProps) {
   return (
     <Sidebar variant="floating" collapsible="icon" {...props}>
       <SidebarHeader className="px-3 pt-4">
@@ -54,7 +58,9 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
                         render={
                           <Link {...link}>
                             <IconTile icon={icon} />
-                            <span className="truncate">{label}</span>
+                            <span className="truncate group-data-[collapsible=icon]:hidden">
+                              {label}
+                            </span>
                           </Link>
                         }
                         tooltip={label}
@@ -64,7 +70,9 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
                           'active:scale-[0.98] ',
                           'data-[status=active]:bg-foreground/6 data-[status=active]:text-foreground ',
                           'hover-fine:bg-foreground/4 ',
-                          'group-data-[collapsible=icon]:size-12! group-data-[collapsible=icon]:p-1.5!',
+                          // Collapsed: a square exactly as wide as the rail's column,
+                          // with the tile centered inside it.
+                          'group-data-[collapsible=icon]:size-10! group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:p-0!',
                         )}
                       />
                     </SidebarMenuItem>
@@ -75,6 +83,10 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
           </div>
         ))}
       </SidebarContent>
+
+      <SidebarFooter className="px-2 pb-3">
+        <SideBarUser user={props.user} />
+      </SidebarFooter>
 
       {/* <SidebarRail />*/}
     </Sidebar>

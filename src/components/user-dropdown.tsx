@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { CircleUserRound, LogOut } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
-import { authClient } from '#/lib/auth-client'
+import { signOut } from '#/lib/auth-client'
 import { Link, useNavigate } from '@tanstack/react-router'
 import { toast } from './ui/toast'
 import type { User } from '#/hooks/use-auth-session'
@@ -56,7 +56,7 @@ export function UserDropdown({
   const navigate = useNavigate()
 
   async function handleSignOut() {
-    await authClient.signOut({
+    await signOut({
       fetchOptions: {
         onSuccess: () => {
           navigate({ to: '/' })

@@ -1,35 +1,75 @@
+import type { CSSProperties } from 'react'
+import { createFileRoute, Outlet } from '@tanstack/react-router'
+import { AppSidebar } from './-components/sidebar'
 import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
-} from '#/components/ui/sidebar'
-import { createFileRoute, Outlet } from '@tanstack/react-router'
-import { AppSidebar } from './-components/sidebar'
-import type { CSSProperties } from 'react'
+} from '@/components/ui/sidebar'
 
 export const Route = createFileRoute('/_authenticated/dashboard')({
-  component: RouteComponent,
+  component: DashboardLayout,
 })
 
-function RouteComponent() {
+function DashboardLayout() {
+  const { auth } = Route.useRouteContext()
   return (
     <SidebarProvider
       style={
         {
           '--sidebar-width': '17rem',
-          '--sidebar-width-icon': '3.75rem',
+          '--sidebar-width-icon': 'calc(var(--spacing) * 14)',
         } as CSSProperties
       }
     >
-      <AppSidebar />
+      <AppSidebar user={auth} />
       <SidebarInset>
         <header className="flex h-14 shrink-0 items-center gap-2 px-4">
           <SidebarTrigger aria-label="Toggle sidebar" />
         </header>
-        <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
+        <div className="flex flex-1 flex-col gap-4 p-6 pt-4">
           <Outlet />
         </div>
       </SidebarInset>
     </SidebarProvider>
   )
 }
+
+// import type { CSSProperties } from 'react'
+// import { createFileRoute, Outlet } from '@tanstack/react-router'
+// import { AppSidebar } from './-components/sidebar'
+// import {
+//   SidebarInset,
+//   SidebarProvider,
+//   SidebarTrigger,
+// } from '@/components/ui/sidebar'
+
+// export const Route = createFileRoute('/_authenticated/dashboard')({
+//   component: DashboardLayout,
+// })
+
+// function DashboardLayout() {
+//   const { auth } = Route.useRouteContext()
+//   return (
+//     <SidebarProvider
+//       style={
+//         {
+//           '--sidebar-width': '17rem',
+//           '--sidebar-width-icon': 'calc(var(--spacing) * 14)',
+//         } as CSSProperties
+//       }
+//     >
+//       <AppSidebar user={auth} />
+//       <SidebarInset className="bg-transparent p-2 md:pl-0">
+//         <div className="flex flex-1 flex-col rounded-lg border border-sidebar-border bg-sidebar shadow-sm">
+//           <header className="flex h-14 shrink-0 items-center gap-2 px-4">
+//             <SidebarTrigger aria-label="Toggle sidebar" />
+//           </header>
+//           <div className="flex flex-1 flex-col gap-4 p-6 pt-4">
+//             <Outlet />
+//           </div>
+//         </div>
+//       </SidebarInset>
+//     </SidebarProvider>
+//   )
+// }

@@ -2,7 +2,7 @@ import z from 'zod'
 
 export const magicLinkSchema = z.object({
   email: z.email('Please provide valid email'),
-  name: z.string().optional(),
+  name: z.string('Please provide a name'),
   callbackURL: z.url().optional(),
 })
 
