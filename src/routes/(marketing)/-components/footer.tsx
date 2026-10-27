@@ -9,7 +9,7 @@ const BRAND = 'scenova'
 const CTA = {
   title: 'Make your first video ad today',
   body: 'Scenova turns your product and a short brief into UGC-style video ads, ready to run.',
-  label: 'Start for free',
+  label: 'Create your first ad',
   href: '/signup',
 }
 

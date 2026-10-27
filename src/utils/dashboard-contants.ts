@@ -18,8 +18,8 @@ export const NAV = [
         activeOptions: { exact: true },
       },
       {
-        to: '/dashboard/create-adds',
-        label: 'Create adds',
+        to: '/dashboard/create-ads',
+        label: 'Create ads',
         icon: Clapperboard,
       },
       { to: '/dashboard/projects', label: 'Projects', icon: Film },

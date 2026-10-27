@@ -21,7 +21,7 @@ import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as AuthenticatedDashboardAccountIndexRouteImport } from './routes/_authenticated/dashboard/account/index'
 import { Route as AuthenticatedDashboardAssetsIndexRouteImport } from './routes/_authenticated/dashboard/assets/index'
 import { Route as AuthenticatedDashboardAvatarIndexRouteImport } from './routes/_authenticated/dashboard/avatar/index'
-import { Route as AuthenticatedDashboardCreateAddsIndexRouteImport } from './routes/_authenticated/dashboard/create-adds/index'
+import { Route as AuthenticatedDashboardCreateAdsIndexRouteImport } from './routes/_authenticated/dashboard/create-ads/index'
 import { Route as AuthenticatedDashboardProjectsIndexRouteImport } from './routes/_authenticated/dashboard/projects/index'
 
 const marketingRouteRoute = marketingRouteRouteImport.update({
@@ -86,10 +86,10 @@ const AuthenticatedDashboardAvatarIndexRoute =
     path: '/avatar/',
     getParentRoute: () => AuthenticatedDashboardRouteRoute,
   } as any)
-const AuthenticatedDashboardCreateAddsIndexRoute =
-  AuthenticatedDashboardCreateAddsIndexRouteImport.update({
-    id: '/create-adds/',
-    path: '/create-adds/',
+const AuthenticatedDashboardCreateAdsIndexRoute =
+  AuthenticatedDashboardCreateAdsIndexRouteImport.update({
+    id: '/create-ads/',
+    path: '/create-ads/',
     getParentRoute: () => AuthenticatedDashboardRouteRoute,
   } as any)
 const AuthenticatedDashboardProjectsIndexRoute =
@@ -109,7 +109,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/account/': typeof AuthenticatedDashboardAccountIndexRoute
   '/dashboard/assets/': typeof AuthenticatedDashboardAssetsIndexRoute
   '/dashboard/avatar/': typeof AuthenticatedDashboardAvatarIndexRoute
-  '/dashboard/create-adds/': typeof AuthenticatedDashboardCreateAddsIndexRoute
+  '/dashboard/create-ads/': typeof AuthenticatedDashboardCreateAdsIndexRoute
   '/dashboard/projects/': typeof AuthenticatedDashboardProjectsIndexRoute
 }
 export interface FileRoutesByTo {
@@ -121,7 +121,7 @@ export interface FileRoutesByTo {
   '/dashboard/account': typeof AuthenticatedDashboardAccountIndexRoute
   '/dashboard/assets': typeof AuthenticatedDashboardAssetsIndexRoute
   '/dashboard/avatar': typeof AuthenticatedDashboardAvatarIndexRoute
-  '/dashboard/create-adds': typeof AuthenticatedDashboardCreateAddsIndexRoute
+  '/dashboard/create-ads': typeof AuthenticatedDashboardCreateAdsIndexRoute
   '/dashboard/projects': typeof AuthenticatedDashboardProjectsIndexRoute
 }
 export interface FileRoutesById {
@@ -138,7 +138,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/account/': typeof AuthenticatedDashboardAccountIndexRoute
   '/_authenticated/dashboard/assets/': typeof AuthenticatedDashboardAssetsIndexRoute
   '/_authenticated/dashboard/avatar/': typeof AuthenticatedDashboardAvatarIndexRoute
-  '/_authenticated/dashboard/create-adds/': typeof AuthenticatedDashboardCreateAddsIndexRoute
+  '/_authenticated/dashboard/create-ads/': typeof AuthenticatedDashboardCreateAdsIndexRoute
   '/_authenticated/dashboard/projects/': typeof AuthenticatedDashboardProjectsIndexRoute
 }
 export interface FileRouteTypes {
@@ -153,7 +153,7 @@ export interface FileRouteTypes {
     | '/dashboard/account/'
     | '/dashboard/assets/'
     | '/dashboard/avatar/'
-    | '/dashboard/create-adds/'
+    | '/dashboard/create-ads/'
     | '/dashboard/projects/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -165,7 +165,7 @@ export interface FileRouteTypes {
     | '/dashboard/account'
     | '/dashboard/assets'
     | '/dashboard/avatar'
-    | '/dashboard/create-adds'
+    | '/dashboard/create-ads'
     | '/dashboard/projects'
   id:
     | '__root__'
@@ -181,7 +181,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/account/'
     | '/_authenticated/dashboard/assets/'
     | '/_authenticated/dashboard/avatar/'
-    | '/_authenticated/dashboard/create-adds/'
+    | '/_authenticated/dashboard/create-ads/'
     | '/_authenticated/dashboard/projects/'
   fileRoutesById: FileRoutesById
 }
@@ -278,11 +278,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardAvatarIndexRouteImport
       parentRoute: typeof AuthenticatedDashboardRouteRoute
     }
-    '/_authenticated/dashboard/create-adds/': {
-      id: '/_authenticated/dashboard/create-adds/'
-      path: '/create-adds'
-      fullPath: '/dashboard/create-adds/'
-      preLoaderRoute: typeof AuthenticatedDashboardCreateAddsIndexRouteImport
+    '/_authenticated/dashboard/create-ads/': {
+      id: '/_authenticated/dashboard/create-ads/'
+      path: '/create-ads'
+      fullPath: '/dashboard/create-ads/'
+      preLoaderRoute: typeof AuthenticatedDashboardCreateAdsIndexRouteImport
       parentRoute: typeof AuthenticatedDashboardRouteRoute
     }
     '/_authenticated/dashboard/projects/': {
@@ -324,7 +324,7 @@ interface AuthenticatedDashboardRouteRouteChildren {
   AuthenticatedDashboardAccountIndexRoute: typeof AuthenticatedDashboardAccountIndexRoute
   AuthenticatedDashboardAssetsIndexRoute: typeof AuthenticatedDashboardAssetsIndexRoute
   AuthenticatedDashboardAvatarIndexRoute: typeof AuthenticatedDashboardAvatarIndexRoute
-  AuthenticatedDashboardCreateAddsIndexRoute: typeof AuthenticatedDashboardCreateAddsIndexRoute
+  AuthenticatedDashboardCreateAdsIndexRoute: typeof AuthenticatedDashboardCreateAdsIndexRoute
   AuthenticatedDashboardProjectsIndexRoute: typeof AuthenticatedDashboardProjectsIndexRoute
 }
 
@@ -337,8 +337,8 @@ const AuthenticatedDashboardRouteRouteChildren: AuthenticatedDashboardRouteRoute
       AuthenticatedDashboardAssetsIndexRoute,
     AuthenticatedDashboardAvatarIndexRoute:
       AuthenticatedDashboardAvatarIndexRoute,
-    AuthenticatedDashboardCreateAddsIndexRoute:
-      AuthenticatedDashboardCreateAddsIndexRoute,
+    AuthenticatedDashboardCreateAdsIndexRoute:
+      AuthenticatedDashboardCreateAdsIndexRoute,
     AuthenticatedDashboardProjectsIndexRoute:
       AuthenticatedDashboardProjectsIndexRoute,
   }
