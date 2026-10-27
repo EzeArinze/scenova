@@ -52,8 +52,8 @@ export function AppSidebar(props: IAppProps) {
               <SidebarGroupContent>
                 <SidebarMenu className="gap-1">
                   {/* Change the key here to use link.to instead of index*/}
-                  {group.items.map(({ label, icon, ...link }, index) => (
-                    <SidebarMenuItem key={index}>
+                  {group.items.map(({ label, icon, ...link }, _index) => (
+                    <SidebarMenuItem key={link.to}>
                       <SidebarMenuButton
                         render={
                           <Link {...link}>

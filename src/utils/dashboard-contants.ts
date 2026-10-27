@@ -4,7 +4,6 @@ import {
   Film,
   Images,
   LayoutDashboard,
-  LayoutTemplate,
   UserRound,
 } from 'lucide-react'
 
@@ -18,16 +17,19 @@ export const NAV = [
         icon: LayoutDashboard,
         activeOptions: { exact: true },
       },
-      { to: '/', label: 'New video', icon: Clapperboard },
-      { to: '/', label: 'Projects', icon: Film },
+      {
+        to: '/dashboard/create-adds',
+        label: 'Create adds',
+        icon: Clapperboard,
+      },
+      { to: '/dashboard/projects', label: 'Projects', icon: Film },
     ]),
   },
   {
     label: 'Library',
     items: linkOptions([
-      { to: '/', label: 'Templates', icon: LayoutTemplate },
-      { to: '/', label: 'Creators', icon: UserRound },
-      { to: '/', label: 'Assets', icon: Images },
+      { to: '/dashboard/avatar', label: 'Avatar', icon: UserRound },
+      { to: '/dashboard/assets', label: 'Assets', icon: Images },
     ]),
   },
 ]

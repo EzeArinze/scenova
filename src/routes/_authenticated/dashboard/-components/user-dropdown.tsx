@@ -21,9 +21,12 @@ import { toast } from '#/components/ui/toast'
 import { UserAvatar } from './user-avatat'
 import { Tile } from './tile'
 
-const accountLink = linkOptions({ to: '/' })
+const accountLink = linkOptions({
+  to: '/dashboard/account',
+  activeOptions: { exact: true },
+})
 const itemClass =
-  'gap-3 rounded-xl p-1.5 transition-transform duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.98]'
+  'gap-3 rounded-xl p-1.5 transition-transform duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.98] cursor-pointer'
 
 export function SideBarUser({ user }: { user: User }) {
   const { isMobile } = useSidebar()
@@ -111,7 +114,11 @@ export function SideBarUser({ user }: { user: User }) {
             <DropdownMenuSeparator className="mx-1.5 my-1.5" />
             <DropdownMenuItem
               render={<Link {...accountLink} />}
-              className={cn(itemClass, 'mt-1')}
+              className={cn(
+                itemClass,
+                'mt-1',
+                ' data-[status=active]:bg-foreground/6 data-[status=active]:text-foreground',
+              )}
             >
               <Tile icon={BadgeCheck} />
               <span className="text-sm font-medium">Account</span>
