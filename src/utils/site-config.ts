@@ -14,5 +14,5 @@ export const MEDIA = {
   video:
     'https://res.cloudinary.com/t44uxef1/video/upload/v1793115106/9698793-uhd_2560_1440_25fps.mp4',
   poster:
-    'https://images.pexels.com/videos/9698793/pexels-photo-9698793.jpeg?auto=compress&w=1260&h=750&dpr=1',
+    'https://res.cloudinary.com/t44uxef1/video/upload/w_1920,q_auto,f_auto/v1793115106/9698793-uhd_2560_1440_25fps.jpg',
 } as const
