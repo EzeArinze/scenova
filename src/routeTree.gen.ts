@@ -23,6 +23,7 @@ import { Route as AuthenticatedDashboardAssetsIndexRouteImport } from './routes/
 import { Route as AuthenticatedDashboardAvatarIndexRouteImport } from './routes/_authenticated/dashboard/avatar/index'
 import { Route as AuthenticatedDashboardCreateAdsIndexRouteImport } from './routes/_authenticated/dashboard/create-ads/index'
 import { Route as AuthenticatedDashboardProjectsIndexRouteImport } from './routes/_authenticated/dashboard/projects/index'
+import { Route as AuthenticatedDashboardTrashIndexRouteImport } from './routes/_authenticated/dashboard/trash/index'
 
 const marketingRouteRoute = marketingRouteRouteImport.update({
   id: '/(marketing)',
@@ -98,6 +99,12 @@ const AuthenticatedDashboardProjectsIndexRoute =
     path: '/projects/',
     getParentRoute: () => AuthenticatedDashboardRouteRoute,
   } as any)
+const AuthenticatedDashboardTrashIndexRoute =
+  AuthenticatedDashboardTrashIndexRouteImport.update({
+    id: '/trash/',
+    path: '/trash/',
+    getParentRoute: () => AuthenticatedDashboardRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof marketingIndexRoute
@@ -111,6 +118,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/avatar/': typeof AuthenticatedDashboardAvatarIndexRoute
   '/dashboard/create-ads/': typeof AuthenticatedDashboardCreateAdsIndexRoute
   '/dashboard/projects/': typeof AuthenticatedDashboardProjectsIndexRoute
+  '/dashboard/trash/': typeof AuthenticatedDashboardTrashIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof marketingIndexRoute
@@ -123,6 +131,7 @@ export interface FileRoutesByTo {
   '/dashboard/avatar': typeof AuthenticatedDashboardAvatarIndexRoute
   '/dashboard/create-ads': typeof AuthenticatedDashboardCreateAdsIndexRoute
   '/dashboard/projects': typeof AuthenticatedDashboardProjectsIndexRoute
+  '/dashboard/trash': typeof AuthenticatedDashboardTrashIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -140,6 +149,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/avatar/': typeof AuthenticatedDashboardAvatarIndexRoute
   '/_authenticated/dashboard/create-ads/': typeof AuthenticatedDashboardCreateAdsIndexRoute
   '/_authenticated/dashboard/projects/': typeof AuthenticatedDashboardProjectsIndexRoute
+  '/_authenticated/dashboard/trash/': typeof AuthenticatedDashboardTrashIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -155,6 +165,7 @@ export interface FileRouteTypes {
     | '/dashboard/avatar/'
     | '/dashboard/create-ads/'
     | '/dashboard/projects/'
+    | '/dashboard/trash/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -167,6 +178,7 @@ export interface FileRouteTypes {
     | '/dashboard/avatar'
     | '/dashboard/create-ads'
     | '/dashboard/projects'
+    | '/dashboard/trash'
   id:
     | '__root__'
     | '/(marketing)'
@@ -183,6 +195,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/avatar/'
     | '/_authenticated/dashboard/create-ads/'
     | '/_authenticated/dashboard/projects/'
+    | '/_authenticated/dashboard/trash/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -292,6 +305,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardProjectsIndexRouteImport
       parentRoute: typeof AuthenticatedDashboardRouteRoute
     }
+    '/_authenticated/dashboard/trash/': {
+      id: '/_authenticated/dashboard/trash/'
+      path: '/trash'
+      fullPath: '/dashboard/trash/'
+      preLoaderRoute: typeof AuthenticatedDashboardTrashIndexRouteImport
+      parentRoute: typeof AuthenticatedDashboardRouteRoute
+    }
   }
 }
 
@@ -326,6 +346,7 @@ interface AuthenticatedDashboardRouteRouteChildren {
   AuthenticatedDashboardAvatarIndexRoute: typeof AuthenticatedDashboardAvatarIndexRoute
   AuthenticatedDashboardCreateAdsIndexRoute: typeof AuthenticatedDashboardCreateAdsIndexRoute
   AuthenticatedDashboardProjectsIndexRoute: typeof AuthenticatedDashboardProjectsIndexRoute
+  AuthenticatedDashboardTrashIndexRoute: typeof AuthenticatedDashboardTrashIndexRoute
 }
 
 const AuthenticatedDashboardRouteRouteChildren: AuthenticatedDashboardRouteRouteChildren =
@@ -341,6 +362,8 @@ const AuthenticatedDashboardRouteRouteChildren: AuthenticatedDashboardRouteRoute
       AuthenticatedDashboardCreateAdsIndexRoute,
     AuthenticatedDashboardProjectsIndexRoute:
       AuthenticatedDashboardProjectsIndexRoute,
+    AuthenticatedDashboardTrashIndexRoute:
+      AuthenticatedDashboardTrashIndexRoute,
   }
 
 const AuthenticatedDashboardRouteRouteWithChildren =
