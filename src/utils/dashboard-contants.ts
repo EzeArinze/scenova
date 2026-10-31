@@ -6,6 +6,7 @@ import {
   LayoutDashboard,
   UserRound,
 } from 'lucide-react'
+import type { Variants } from 'motion/react'
 
 export const NAV = [
   {
@@ -13,7 +14,7 @@ export const NAV = [
     items: linkOptions([
       {
         to: '/dashboard',
-        label: 'Overview',
+        label: 'Home / All Media',
         icon: LayoutDashboard,
         activeOptions: { exact: true },
       },
@@ -33,3 +34,15 @@ export const NAV = [
     ]),
   },
 ]
+
+export const EASE_OUT: [number, number, number, number] = [0.23, 1, 0.32, 1]
+
+export const stagger: Variants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.05, delayChildren: 0.02 } },
+}
+
+export const rise: Variants = {
+  hidden: { opacity: 0, y: 8 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.26, ease: EASE_OUT } },
+}
