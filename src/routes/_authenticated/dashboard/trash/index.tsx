@@ -5,5 +5,9 @@ export const Route = createFileRoute('/_authenticated/dashboard/trash/')({
 })
 
 function RouteComponent() {
-  return <div>Hello "/_authenticated/dashboard/trash/"!</div>
+  return (
+    <div>
+      <p>Trash Page</p>
+    </div>
+  )
 }
