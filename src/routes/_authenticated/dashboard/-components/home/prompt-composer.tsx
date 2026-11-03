@@ -18,7 +18,10 @@ import {
 } from './types-and-constants/constant'
 import { useFileDrop } from '#/hooks/use-file-drop'
 import { useImageAttachments } from '#/hooks/use-image-attachments'
-import type { ComposerSettings, PromptComposerProps } from './types'
+import type {
+  ComposerSettings,
+  PromptComposerProps,
+} from './types-and-constants/types'
 
 export function PromptComposer({
   onSubmit,
