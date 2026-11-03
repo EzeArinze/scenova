@@ -1,11 +1,5 @@
-import {
-  useCallback,
-  useEffect,
-  useImperativeHandle,
-  useRef,
-  useState,
-} from 'react'
-import type { DragEvent, KeyboardEvent, Ref } from 'react'
+import { useEffect, useImperativeHandle, useRef, useState } from 'react'
+import type { KeyboardEvent } from 'react'
 import { ArrowRight, Check, Plus, X } from 'lucide-react'
 import { cn } from 'cn'
 import {
@@ -21,36 +15,10 @@ import {
   RATIOS,
   SECONDS,
   VARIATIONS,
-} from './constant'
-
-// Placeholder option sets. Edit these to match what the renderer supports.
-
-export type ComposerSettings = {
-  ratio: (typeof RATIOS)[number]
-  seconds: number
-  variations: number
-}
-
-export type ComposerDraft = {
-  prompt: string
-  images: File[]
-  useAvatar: boolean
-  settings: ComposerSettings
-}
-
-export type PromptComposerHandle = {
-  openFilePicker: () => void
-  setAvatar: (on: boolean) => void
-  focus: () => void
-}
-
-type Attachment = { id: string; file: File; url: string }
-
-type PromptComposerProps = {
-  onSubmit: (draft: ComposerDraft) => void
-  disabled?: boolean
-  ref?: Ref<PromptComposerHandle>
-}
+} from './types-and-constants/constant'
+import { useFileDrop } from '#/hooks/use-file-drop'
+import { useImageAttachments } from '#/hooks/use-image-attachments'
+import type { ComposerSettings, PromptComposerProps } from './types'
 
 export function PromptComposer({
   onSubmit,
@@ -58,19 +26,18 @@ export function PromptComposer({
   ref,
 }: PromptComposerProps) {
   const [prompt, setPrompt] = useState('')
-  const [items, setItems] = useState<Attachment[]>([])
   const [useAvatar, setUseAvatar] = useState(false)
   const [settings, setSettings] = useState<ComposerSettings>({
     ratio: '9:16',
     seconds: 8,
     variations: 2,
   })
-  const [dragging, setDragging] = useState(false)
 
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
-  const itemsRef = useRef(items)
-  itemsRef.current = items
+
+  const attachments = useImageAttachments({})
+  const { isDragging, dropProps } = useFileDrop({ onFiles: attachments.add })
 
   useImperativeHandle(
     ref,
@@ -82,12 +49,6 @@ export function PromptComposer({
     [],
   )
 
-  // Release object URLs when the composer unmounts.
-  useEffect(
-    () => () => itemsRef.current.forEach((i) => URL.revokeObjectURL(i.url)),
-    [],
-  )
-
   // Grow the textarea with its content, up to a cap.
   useEffect(() => {
     const el = textareaRef.current
@@ -96,31 +57,14 @@ export function PromptComposer({
     el.style.height = `${Math.min(el.scrollHeight, MAX_TEXTAREA_PX)}px`
   }, [prompt])
 
-  const addFiles = useCallback((list: FileList | File[]) => {
-    const images = Array.from(list).filter((f) => f.type.startsWith('image/'))
-    const room = MAX_IMAGES - itemsRef.current.length
-    if (!images.length || room <= 0) return
-    const next = images.slice(0, room).map((file) => ({
-      id: crypto.randomUUID(),
-      file,
-      url: URL.createObjectURL(file),
-    }))
-    setItems((prev) => [...prev, ...next])
-  }, [])
-
-  function removeItem(id: string) {
-    const target = items.find((i) => i.id === id)
-    if (target) URL.revokeObjectURL(target.url)
-    setItems((prev) => prev.filter((i) => i.id !== id))
-  }
-
-  const canSubmit = !disabled && (prompt.trim().length > 0 || items.length > 0)
+  const canSubmit =
+    !disabled && (prompt.trim().length > 0 || attachments.hasItems)
 
   function submit() {
     if (!canSubmit) return
     onSubmit({
       prompt: prompt.trim(),
-      images: items.map((i) => i.file),
+      images: attachments.files,
       useAvatar,
       settings,
     })
@@ -131,28 +75,6 @@ export function PromptComposer({
       e.preventDefault()
       submit()
     }
-  }
-
-  function hasFiles(e: DragEvent) {
-    return Array.from(e.dataTransfer.types).includes('Files')
-  }
-
-  function onDragOver(e: DragEvent) {
-    if (!hasFiles(e)) return
-    e.preventDefault()
-    setDragging(true)
-  }
-
-  function onDragLeave(e: DragEvent) {
-    if (e.currentTarget.contains(e.relatedTarget as Node | null)) return
-    setDragging(false)
-  }
-
-  function onDrop(e: DragEvent) {
-    if (!hasFiles(e)) return
-    e.preventDefault()
-    setDragging(false)
-    addFiles(e.dataTransfer.files)
   }
 
   const summary = `${settings.ratio} · ${settings.seconds}s · x${settings.variations}`
@@ -166,18 +88,17 @@ export function PromptComposer({
       className="mx-auto w-full max-w-2xl"
     >
       <div
-        onDragEnter={onDragOver}
-        onDragOver={onDragOver}
-        onDragLeave={onDragLeave}
-        onDrop={onDrop}
+        {...dropProps}
         className={cn(
           'rounded-3xl border bg-card p-3 focus-within:border-foreground/25',
-          dragging ? 'border-primary ring-4 ring-primary/15' : 'border-border',
+          isDragging
+            ? 'border-primary ring-4 ring-primary/15'
+            : 'border-border',
         )}
       >
-        {items.length > 0 && (
+        {attachments.items.length > 0 && (
           <ul className="flex flex-wrap gap-2 px-1 pb-2">
-            {items.map((item) => (
+            {attachments.items.map((item) => (
               <li key={item.id} className="relative">
                 <img
                   src={item.url}
@@ -186,7 +107,7 @@ export function PromptComposer({
                 />
                 <button
                   type="button"
-                  onClick={() => removeItem(item.id)}
+                  onClick={() => attachments.remove(item.id)}
                   aria-label={`Remove ${item.file.name}`}
                   className={cn(
                     'absolute -top-1.5 -right-1.5 grid size-5 place-items-center rounded-full border border-border bg-background text-foreground transition-[scale] duration-150 active:scale-[0.92]',
@@ -216,7 +137,7 @@ export function PromptComposer({
             <button
               type="button"
               onClick={() => fileInputRef.current?.click()}
-              disabled={items.length >= MAX_IMAGES}
+              disabled={attachments.items.length >= MAX_IMAGES}
               aria-label="Attach product photos"
               className={cn(
                 'grid size-9 place-items-center rounded-full border border-border bg-muted/40 text-foreground transition-[scale,opacity] duration-150 active:scale-[0.97] disabled:opacity-40',
@@ -314,7 +235,7 @@ export function PromptComposer({
         multiple
         hidden
         onChange={(e) => {
-          if (e.target.files) addFiles(e.target.files)
+          if (e.target.files) attachments.add(e.target.files)
           e.target.value = '' // allow picking the same file again
         }}
       />

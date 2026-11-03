@@ -1,5 +1,5 @@
 import { cn } from 'cn'
-import { EASE } from './constant'
+import { EASE } from './types-and-constants/constant'
 
 export function OptionGroup<T extends string | number>({
   label,
