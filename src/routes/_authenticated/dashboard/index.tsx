@@ -2,10 +2,6 @@ import { createFileRoute } from '@tanstack/react-router'
 import { motion, useReducedMotion } from 'motion/react'
 import { useRef, useState } from 'react'
 import { PromptComposer } from './-components/home/prompt-composer'
-import type {
-  ComposerDraft,
-  PromptComposerHandle,
-} from './-components/home/prompt-composer'
 import type { StartAction } from './-components/home/start-cards'
 import { MediaGrid } from './-components/home/media-grid'
 import type { MediaItem } from './-components/home/media-grid'
@@ -13,6 +9,10 @@ import { rise, stagger } from '#/utils/dashboard-contants'
 import { MediaSearch } from './-components/home/media-search'
 import { HomeEmpty } from './-components/home/home-empty'
 import { userObjectConstructor } from '#/utils/user-object-constructor'
+import type {
+  ComposerDraft,
+  PromptComposerHandle,
+} from './-components/home/types-and-constants/types'
 
 export const Route = createFileRoute('/_authenticated/dashboard/')({
   component: RouteComponent,

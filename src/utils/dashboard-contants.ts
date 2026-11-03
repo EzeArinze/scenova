@@ -2,9 +2,10 @@ import { linkOptions } from '@tanstack/react-router'
 import {
   Clapperboard,
   Film,
-  Images,
+  ImagesIcon,
   LayoutDashboard,
   UserRound,
+  Video,
 } from 'lucide-react'
 import type { Variants } from 'motion/react'
 
@@ -14,23 +15,24 @@ export const NAV = [
     items: linkOptions([
       {
         to: '/dashboard',
-        label: 'Home / All Media',
+        label: 'Home',
         icon: LayoutDashboard,
         activeOptions: { exact: true },
       },
       {
-        to: '/dashboard/create-ads',
-        label: 'Create ads',
+        to: '/dashboard/all-media',
+        label: 'All Media',
         icon: Clapperboard,
       },
-      { to: '/dashboard/projects', label: 'Projects', icon: Film },
+      { to: '/dashboard/images', label: 'Images', icon: ImagesIcon },
+      { to: '/dashboard/videos', label: 'Videos', icon: Film },
     ]),
   },
   {
     label: 'Library',
     items: linkOptions([
       { to: '/dashboard/avatar', label: 'Avatar', icon: UserRound },
-      { to: '/dashboard/assets', label: 'Assets', icon: Images },
+      { to: '/dashboard', label: 'Scenes', icon: Video },
     ]),
   },
 ]

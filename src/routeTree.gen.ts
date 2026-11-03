@@ -19,11 +19,11 @@ import { Route as AuthSignupIndexRouteImport } from './routes/_auth/signup/index
 import { Route as AuthenticatedDashboardIndexRouteImport } from './routes/_authenticated/dashboard/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as AuthenticatedDashboardAccountIndexRouteImport } from './routes/_authenticated/dashboard/account/index'
-import { Route as AuthenticatedDashboardAssetsIndexRouteImport } from './routes/_authenticated/dashboard/assets/index'
+import { Route as AuthenticatedDashboardAllMediaIndexRouteImport } from './routes/_authenticated/dashboard/all-media/index'
 import { Route as AuthenticatedDashboardAvatarIndexRouteImport } from './routes/_authenticated/dashboard/avatar/index'
-import { Route as AuthenticatedDashboardCreateAdsIndexRouteImport } from './routes/_authenticated/dashboard/create-ads/index'
-import { Route as AuthenticatedDashboardProjectsIndexRouteImport } from './routes/_authenticated/dashboard/projects/index'
+import { Route as AuthenticatedDashboardImagesIndexRouteImport } from './routes/_authenticated/dashboard/images/index'
 import { Route as AuthenticatedDashboardTrashIndexRouteImport } from './routes/_authenticated/dashboard/trash/index'
+import { Route as AuthenticatedDashboardVideosIndexRouteImport } from './routes/_authenticated/dashboard/videos/index'
 
 const marketingRouteRoute = marketingRouteRouteImport.update({
   id: '/(marketing)',
@@ -75,10 +75,10 @@ const AuthenticatedDashboardAccountIndexRoute =
     path: '/account/',
     getParentRoute: () => AuthenticatedDashboardRouteRoute,
   } as any)
-const AuthenticatedDashboardAssetsIndexRoute =
-  AuthenticatedDashboardAssetsIndexRouteImport.update({
-    id: '/assets/',
-    path: '/assets/',
+const AuthenticatedDashboardAllMediaIndexRoute =
+  AuthenticatedDashboardAllMediaIndexRouteImport.update({
+    id: '/all-media/',
+    path: '/all-media/',
     getParentRoute: () => AuthenticatedDashboardRouteRoute,
   } as any)
 const AuthenticatedDashboardAvatarIndexRoute =
@@ -87,22 +87,22 @@ const AuthenticatedDashboardAvatarIndexRoute =
     path: '/avatar/',
     getParentRoute: () => AuthenticatedDashboardRouteRoute,
   } as any)
-const AuthenticatedDashboardCreateAdsIndexRoute =
-  AuthenticatedDashboardCreateAdsIndexRouteImport.update({
-    id: '/create-ads/',
-    path: '/create-ads/',
-    getParentRoute: () => AuthenticatedDashboardRouteRoute,
-  } as any)
-const AuthenticatedDashboardProjectsIndexRoute =
-  AuthenticatedDashboardProjectsIndexRouteImport.update({
-    id: '/projects/',
-    path: '/projects/',
+const AuthenticatedDashboardImagesIndexRoute =
+  AuthenticatedDashboardImagesIndexRouteImport.update({
+    id: '/images/',
+    path: '/images/',
     getParentRoute: () => AuthenticatedDashboardRouteRoute,
   } as any)
 const AuthenticatedDashboardTrashIndexRoute =
   AuthenticatedDashboardTrashIndexRouteImport.update({
     id: '/trash/',
     path: '/trash/',
+    getParentRoute: () => AuthenticatedDashboardRouteRoute,
+  } as any)
+const AuthenticatedDashboardVideosIndexRoute =
+  AuthenticatedDashboardVideosIndexRouteImport.update({
+    id: '/videos/',
+    path: '/videos/',
     getParentRoute: () => AuthenticatedDashboardRouteRoute,
   } as any)
 
@@ -114,11 +114,11 @@ export interface FileRoutesByFullPath {
   '/signup/': typeof AuthSignupIndexRoute
   '/dashboard/': typeof AuthenticatedDashboardIndexRoute
   '/dashboard/account/': typeof AuthenticatedDashboardAccountIndexRoute
-  '/dashboard/assets/': typeof AuthenticatedDashboardAssetsIndexRoute
+  '/dashboard/all-media/': typeof AuthenticatedDashboardAllMediaIndexRoute
   '/dashboard/avatar/': typeof AuthenticatedDashboardAvatarIndexRoute
-  '/dashboard/create-ads/': typeof AuthenticatedDashboardCreateAdsIndexRoute
-  '/dashboard/projects/': typeof AuthenticatedDashboardProjectsIndexRoute
+  '/dashboard/images/': typeof AuthenticatedDashboardImagesIndexRoute
   '/dashboard/trash/': typeof AuthenticatedDashboardTrashIndexRoute
+  '/dashboard/videos/': typeof AuthenticatedDashboardVideosIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof marketingIndexRoute
@@ -127,11 +127,11 @@ export interface FileRoutesByTo {
   '/signup': typeof AuthSignupIndexRoute
   '/dashboard': typeof AuthenticatedDashboardIndexRoute
   '/dashboard/account': typeof AuthenticatedDashboardAccountIndexRoute
-  '/dashboard/assets': typeof AuthenticatedDashboardAssetsIndexRoute
+  '/dashboard/all-media': typeof AuthenticatedDashboardAllMediaIndexRoute
   '/dashboard/avatar': typeof AuthenticatedDashboardAvatarIndexRoute
-  '/dashboard/create-ads': typeof AuthenticatedDashboardCreateAdsIndexRoute
-  '/dashboard/projects': typeof AuthenticatedDashboardProjectsIndexRoute
+  '/dashboard/images': typeof AuthenticatedDashboardImagesIndexRoute
   '/dashboard/trash': typeof AuthenticatedDashboardTrashIndexRoute
+  '/dashboard/videos': typeof AuthenticatedDashboardVideosIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -145,11 +145,11 @@ export interface FileRoutesById {
   '/_auth/signup/': typeof AuthSignupIndexRoute
   '/_authenticated/dashboard/': typeof AuthenticatedDashboardIndexRoute
   '/_authenticated/dashboard/account/': typeof AuthenticatedDashboardAccountIndexRoute
-  '/_authenticated/dashboard/assets/': typeof AuthenticatedDashboardAssetsIndexRoute
+  '/_authenticated/dashboard/all-media/': typeof AuthenticatedDashboardAllMediaIndexRoute
   '/_authenticated/dashboard/avatar/': typeof AuthenticatedDashboardAvatarIndexRoute
-  '/_authenticated/dashboard/create-ads/': typeof AuthenticatedDashboardCreateAdsIndexRoute
-  '/_authenticated/dashboard/projects/': typeof AuthenticatedDashboardProjectsIndexRoute
+  '/_authenticated/dashboard/images/': typeof AuthenticatedDashboardImagesIndexRoute
   '/_authenticated/dashboard/trash/': typeof AuthenticatedDashboardTrashIndexRoute
+  '/_authenticated/dashboard/videos/': typeof AuthenticatedDashboardVideosIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -161,11 +161,11 @@ export interface FileRouteTypes {
     | '/signup/'
     | '/dashboard/'
     | '/dashboard/account/'
-    | '/dashboard/assets/'
+    | '/dashboard/all-media/'
     | '/dashboard/avatar/'
-    | '/dashboard/create-ads/'
-    | '/dashboard/projects/'
+    | '/dashboard/images/'
     | '/dashboard/trash/'
+    | '/dashboard/videos/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -174,11 +174,11 @@ export interface FileRouteTypes {
     | '/signup'
     | '/dashboard'
     | '/dashboard/account'
-    | '/dashboard/assets'
+    | '/dashboard/all-media'
     | '/dashboard/avatar'
-    | '/dashboard/create-ads'
-    | '/dashboard/projects'
+    | '/dashboard/images'
     | '/dashboard/trash'
+    | '/dashboard/videos'
   id:
     | '__root__'
     | '/(marketing)'
@@ -191,11 +191,11 @@ export interface FileRouteTypes {
     | '/_auth/signup/'
     | '/_authenticated/dashboard/'
     | '/_authenticated/dashboard/account/'
-    | '/_authenticated/dashboard/assets/'
+    | '/_authenticated/dashboard/all-media/'
     | '/_authenticated/dashboard/avatar/'
-    | '/_authenticated/dashboard/create-ads/'
-    | '/_authenticated/dashboard/projects/'
+    | '/_authenticated/dashboard/images/'
     | '/_authenticated/dashboard/trash/'
+    | '/_authenticated/dashboard/videos/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -277,11 +277,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardAccountIndexRouteImport
       parentRoute: typeof AuthenticatedDashboardRouteRoute
     }
-    '/_authenticated/dashboard/assets/': {
-      id: '/_authenticated/dashboard/assets/'
-      path: '/assets'
-      fullPath: '/dashboard/assets/'
-      preLoaderRoute: typeof AuthenticatedDashboardAssetsIndexRouteImport
+    '/_authenticated/dashboard/all-media/': {
+      id: '/_authenticated/dashboard/all-media/'
+      path: '/all-media'
+      fullPath: '/dashboard/all-media/'
+      preLoaderRoute: typeof AuthenticatedDashboardAllMediaIndexRouteImport
       parentRoute: typeof AuthenticatedDashboardRouteRoute
     }
     '/_authenticated/dashboard/avatar/': {
@@ -291,18 +291,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardAvatarIndexRouteImport
       parentRoute: typeof AuthenticatedDashboardRouteRoute
     }
-    '/_authenticated/dashboard/create-ads/': {
-      id: '/_authenticated/dashboard/create-ads/'
-      path: '/create-ads'
-      fullPath: '/dashboard/create-ads/'
-      preLoaderRoute: typeof AuthenticatedDashboardCreateAdsIndexRouteImport
-      parentRoute: typeof AuthenticatedDashboardRouteRoute
-    }
-    '/_authenticated/dashboard/projects/': {
-      id: '/_authenticated/dashboard/projects/'
-      path: '/projects'
-      fullPath: '/dashboard/projects/'
-      preLoaderRoute: typeof AuthenticatedDashboardProjectsIndexRouteImport
+    '/_authenticated/dashboard/images/': {
+      id: '/_authenticated/dashboard/images/'
+      path: '/images'
+      fullPath: '/dashboard/images/'
+      preLoaderRoute: typeof AuthenticatedDashboardImagesIndexRouteImport
       parentRoute: typeof AuthenticatedDashboardRouteRoute
     }
     '/_authenticated/dashboard/trash/': {
@@ -310,6 +303,13 @@ declare module '@tanstack/react-router' {
       path: '/trash'
       fullPath: '/dashboard/trash/'
       preLoaderRoute: typeof AuthenticatedDashboardTrashIndexRouteImport
+      parentRoute: typeof AuthenticatedDashboardRouteRoute
+    }
+    '/_authenticated/dashboard/videos/': {
+      id: '/_authenticated/dashboard/videos/'
+      path: '/videos'
+      fullPath: '/dashboard/videos/'
+      preLoaderRoute: typeof AuthenticatedDashboardVideosIndexRouteImport
       parentRoute: typeof AuthenticatedDashboardRouteRoute
     }
   }
@@ -342,11 +342,11 @@ const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
 interface AuthenticatedDashboardRouteRouteChildren {
   AuthenticatedDashboardIndexRoute: typeof AuthenticatedDashboardIndexRoute
   AuthenticatedDashboardAccountIndexRoute: typeof AuthenticatedDashboardAccountIndexRoute
-  AuthenticatedDashboardAssetsIndexRoute: typeof AuthenticatedDashboardAssetsIndexRoute
+  AuthenticatedDashboardAllMediaIndexRoute: typeof AuthenticatedDashboardAllMediaIndexRoute
   AuthenticatedDashboardAvatarIndexRoute: typeof AuthenticatedDashboardAvatarIndexRoute
-  AuthenticatedDashboardCreateAdsIndexRoute: typeof AuthenticatedDashboardCreateAdsIndexRoute
-  AuthenticatedDashboardProjectsIndexRoute: typeof AuthenticatedDashboardProjectsIndexRoute
+  AuthenticatedDashboardImagesIndexRoute: typeof AuthenticatedDashboardImagesIndexRoute
   AuthenticatedDashboardTrashIndexRoute: typeof AuthenticatedDashboardTrashIndexRoute
+  AuthenticatedDashboardVideosIndexRoute: typeof AuthenticatedDashboardVideosIndexRoute
 }
 
 const AuthenticatedDashboardRouteRouteChildren: AuthenticatedDashboardRouteRouteChildren =
@@ -354,16 +354,16 @@ const AuthenticatedDashboardRouteRouteChildren: AuthenticatedDashboardRouteRoute
     AuthenticatedDashboardIndexRoute: AuthenticatedDashboardIndexRoute,
     AuthenticatedDashboardAccountIndexRoute:
       AuthenticatedDashboardAccountIndexRoute,
-    AuthenticatedDashboardAssetsIndexRoute:
-      AuthenticatedDashboardAssetsIndexRoute,
+    AuthenticatedDashboardAllMediaIndexRoute:
+      AuthenticatedDashboardAllMediaIndexRoute,
     AuthenticatedDashboardAvatarIndexRoute:
       AuthenticatedDashboardAvatarIndexRoute,
-    AuthenticatedDashboardCreateAdsIndexRoute:
-      AuthenticatedDashboardCreateAdsIndexRoute,
-    AuthenticatedDashboardProjectsIndexRoute:
-      AuthenticatedDashboardProjectsIndexRoute,
+    AuthenticatedDashboardImagesIndexRoute:
+      AuthenticatedDashboardImagesIndexRoute,
     AuthenticatedDashboardTrashIndexRoute:
       AuthenticatedDashboardTrashIndexRoute,
+    AuthenticatedDashboardVideosIndexRoute:
+      AuthenticatedDashboardVideosIndexRoute,
   }
 
 const AuthenticatedDashboardRouteRouteWithChildren =
