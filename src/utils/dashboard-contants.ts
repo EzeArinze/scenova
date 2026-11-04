@@ -2,10 +2,10 @@ import { linkOptions } from '@tanstack/react-router'
 import {
   Clapperboard,
   Film,
+  FolderKanban,
   ImagesIcon,
   LayoutDashboard,
   UserRound,
-  Video,
 } from 'lucide-react'
 import type { Variants } from 'motion/react'
 
@@ -31,8 +31,8 @@ export const NAV = [
   {
     label: 'Library',
     items: linkOptions([
+      { to: '/dashboard/projects', label: 'Projects', icon: FolderKanban },
       { to: '/dashboard/avatar', label: 'Avatar', icon: UserRound },
-      { to: '/dashboard', label: 'Scenes', icon: Video },
     ]),
   },
 ]

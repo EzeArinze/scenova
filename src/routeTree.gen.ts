@@ -22,6 +22,7 @@ import { Route as AuthenticatedDashboardAccountIndexRouteImport } from './routes
 import { Route as AuthenticatedDashboardAllMediaIndexRouteImport } from './routes/_authenticated/dashboard/all-media/index'
 import { Route as AuthenticatedDashboardAvatarIndexRouteImport } from './routes/_authenticated/dashboard/avatar/index'
 import { Route as AuthenticatedDashboardImagesIndexRouteImport } from './routes/_authenticated/dashboard/images/index'
+import { Route as AuthenticatedDashboardProjectsIndexRouteImport } from './routes/_authenticated/dashboard/projects/index'
 import { Route as AuthenticatedDashboardTrashIndexRouteImport } from './routes/_authenticated/dashboard/trash/index'
 import { Route as AuthenticatedDashboardVideosIndexRouteImport } from './routes/_authenticated/dashboard/videos/index'
 
@@ -93,6 +94,12 @@ const AuthenticatedDashboardImagesIndexRoute =
     path: '/images/',
     getParentRoute: () => AuthenticatedDashboardRouteRoute,
   } as any)
+const AuthenticatedDashboardProjectsIndexRoute =
+  AuthenticatedDashboardProjectsIndexRouteImport.update({
+    id: '/projects/',
+    path: '/projects/',
+    getParentRoute: () => AuthenticatedDashboardRouteRoute,
+  } as any)
 const AuthenticatedDashboardTrashIndexRoute =
   AuthenticatedDashboardTrashIndexRouteImport.update({
     id: '/trash/',
@@ -117,6 +124,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/all-media/': typeof AuthenticatedDashboardAllMediaIndexRoute
   '/dashboard/avatar/': typeof AuthenticatedDashboardAvatarIndexRoute
   '/dashboard/images/': typeof AuthenticatedDashboardImagesIndexRoute
+  '/dashboard/projects/': typeof AuthenticatedDashboardProjectsIndexRoute
   '/dashboard/trash/': typeof AuthenticatedDashboardTrashIndexRoute
   '/dashboard/videos/': typeof AuthenticatedDashboardVideosIndexRoute
 }
@@ -130,6 +138,7 @@ export interface FileRoutesByTo {
   '/dashboard/all-media': typeof AuthenticatedDashboardAllMediaIndexRoute
   '/dashboard/avatar': typeof AuthenticatedDashboardAvatarIndexRoute
   '/dashboard/images': typeof AuthenticatedDashboardImagesIndexRoute
+  '/dashboard/projects': typeof AuthenticatedDashboardProjectsIndexRoute
   '/dashboard/trash': typeof AuthenticatedDashboardTrashIndexRoute
   '/dashboard/videos': typeof AuthenticatedDashboardVideosIndexRoute
 }
@@ -148,6 +157,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/all-media/': typeof AuthenticatedDashboardAllMediaIndexRoute
   '/_authenticated/dashboard/avatar/': typeof AuthenticatedDashboardAvatarIndexRoute
   '/_authenticated/dashboard/images/': typeof AuthenticatedDashboardImagesIndexRoute
+  '/_authenticated/dashboard/projects/': typeof AuthenticatedDashboardProjectsIndexRoute
   '/_authenticated/dashboard/trash/': typeof AuthenticatedDashboardTrashIndexRoute
   '/_authenticated/dashboard/videos/': typeof AuthenticatedDashboardVideosIndexRoute
 }
@@ -164,6 +174,7 @@ export interface FileRouteTypes {
     | '/dashboard/all-media/'
     | '/dashboard/avatar/'
     | '/dashboard/images/'
+    | '/dashboard/projects/'
     | '/dashboard/trash/'
     | '/dashboard/videos/'
   fileRoutesByTo: FileRoutesByTo
@@ -177,6 +188,7 @@ export interface FileRouteTypes {
     | '/dashboard/all-media'
     | '/dashboard/avatar'
     | '/dashboard/images'
+    | '/dashboard/projects'
     | '/dashboard/trash'
     | '/dashboard/videos'
   id:
@@ -194,6 +206,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/all-media/'
     | '/_authenticated/dashboard/avatar/'
     | '/_authenticated/dashboard/images/'
+    | '/_authenticated/dashboard/projects/'
     | '/_authenticated/dashboard/trash/'
     | '/_authenticated/dashboard/videos/'
   fileRoutesById: FileRoutesById
@@ -298,6 +311,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardImagesIndexRouteImport
       parentRoute: typeof AuthenticatedDashboardRouteRoute
     }
+    '/_authenticated/dashboard/projects/': {
+      id: '/_authenticated/dashboard/projects/'
+      path: '/projects'
+      fullPath: '/dashboard/projects/'
+      preLoaderRoute: typeof AuthenticatedDashboardProjectsIndexRouteImport
+      parentRoute: typeof AuthenticatedDashboardRouteRoute
+    }
     '/_authenticated/dashboard/trash/': {
       id: '/_authenticated/dashboard/trash/'
       path: '/trash'
@@ -345,6 +365,7 @@ interface AuthenticatedDashboardRouteRouteChildren {
   AuthenticatedDashboardAllMediaIndexRoute: typeof AuthenticatedDashboardAllMediaIndexRoute
   AuthenticatedDashboardAvatarIndexRoute: typeof AuthenticatedDashboardAvatarIndexRoute
   AuthenticatedDashboardImagesIndexRoute: typeof AuthenticatedDashboardImagesIndexRoute
+  AuthenticatedDashboardProjectsIndexRoute: typeof AuthenticatedDashboardProjectsIndexRoute
   AuthenticatedDashboardTrashIndexRoute: typeof AuthenticatedDashboardTrashIndexRoute
   AuthenticatedDashboardVideosIndexRoute: typeof AuthenticatedDashboardVideosIndexRoute
 }
@@ -360,6 +381,8 @@ const AuthenticatedDashboardRouteRouteChildren: AuthenticatedDashboardRouteRoute
       AuthenticatedDashboardAvatarIndexRoute,
     AuthenticatedDashboardImagesIndexRoute:
       AuthenticatedDashboardImagesIndexRoute,
+    AuthenticatedDashboardProjectsIndexRoute:
+      AuthenticatedDashboardProjectsIndexRoute,
     AuthenticatedDashboardTrashIndexRoute:
       AuthenticatedDashboardTrashIndexRoute,
     AuthenticatedDashboardVideosIndexRoute:
