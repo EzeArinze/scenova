@@ -13,6 +13,8 @@ import appCss from '../styles.css?url'
 import type { QueryClient } from '@tanstack/react-query'
 import { Toaster } from '#/components/ui/toast'
 import { TooltipProvider } from '#/components/ui/tooltip'
+import { GlobalError } from '#/components/error-component'
+import { NotFound } from '#/components/not-found'
 
 interface MyRouterContext {
   queryClient: QueryClient
@@ -56,7 +58,8 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
     ],
   }),
   shellComponent: RootDocument,
-  notFoundComponent: () => <p>Not Found</p>,
+  errorComponent: GlobalError,
+  notFoundComponent: NotFound,
 })
 
 function RootDocument({ children }: { children: React.ReactNode }) {
