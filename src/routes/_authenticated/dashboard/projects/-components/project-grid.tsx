@@ -27,7 +27,7 @@ export function PageHeading({
 }) {
   return (
     <motion.div variants={rise}>
-      <h2 className="font-serif text-4xl leading-tight font-medium tracking-tight text-balance">
+      <h2 className="text-4xl leading-tight font-medium tracking-tight text-balance">
         {title}
       </h2>
       <p className="mt-2 max-w-xl text-[15px] text-muted-foreground">

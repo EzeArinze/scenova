@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { motion, useReducedMotion } from 'motion/react'
 import { useRef, useState } from 'react'
 import { PromptComposer } from './-components/home/prompt-composer'
@@ -13,6 +13,7 @@ import type {
   ComposerDraft,
   PromptComposerHandle,
 } from './-components/home/types-and-constants/types'
+import { createProject } from '#/utils/projects-utils/mock-api'
 
 export const Route = createFileRoute('/_authenticated/dashboard/')({
   component: RouteComponent,
@@ -21,6 +22,7 @@ export const Route = createFileRoute('/_authenticated/dashboard/')({
 function RouteComponent() {
   const { auth } = Route.useRouteContext()
 
+  const navigate = useNavigate()
   const { firstName, name } = userObjectConstructor({ user: auth })
   const reduceMotion = useReducedMotion()
   const composerRef = useRef<PromptComposerHandle>(null)
@@ -39,8 +41,23 @@ function RouteComponent() {
   }
 
   function handleSubmit(draft: ComposerDraft) {
-    // TODO: create the project and go to its storyboard.
-    console.info('create ad', draft)
+    if (draft.images.length === 0) {
+      // setMissingPhoto(true)
+      return
+    }
+    // setMissingPhoto(false)
+
+    const projectId = createProject({
+      idea: draft.prompt,
+      images: draft.images,
+      useAvatar: draft.useAvatar,
+      ratio: draft.settings.ratio,
+      versions: draft.settings.variations,
+    })
+    void navigate({
+      to: '/dashboard/projects/$project_id',
+      params: { project_id: projectId },
+    })
   }
 
   const UserName = firstName || name
