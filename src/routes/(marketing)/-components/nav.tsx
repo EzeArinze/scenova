@@ -35,9 +35,10 @@ export function Nav() {
         {/* Desktop navigation */}
         <ul className="hidden items-center gap-1 md:flex">
           {siteConfig.nav.map((item) => (
-            <li key={item.href}>
-              <a
-                href={item.href}
+            <li key={item.id}>
+              <Link
+                to={item.to}
+                hash={item.hash}
                 className={cn(
                   'relative rounded-lg px-3 py-2 text-small font-medium text-muted-foreground',
                   'transition-colors duration-200',
@@ -46,7 +47,7 @@ export function Nav() {
                 )}
               >
                 {item.label}
-              </a>
+              </Link>
             </li>
           ))}
         </ul>
@@ -141,9 +142,10 @@ export function Nav() {
             >
               <ul className="space-y-1">
                 {siteConfig.nav.map((item) => (
-                  <li key={item.href}>
-                    <a
-                      href={item.href}
+                  <li key={item.id}>
+                    <Link
+                      to={item.to}
+                      hash={item.hash}
                       onClick={(event) => {
                         event.currentTarget
                           .closest('details')
@@ -158,7 +160,7 @@ export function Nav() {
                       )}
                     >
                       {item.label}
-                    </a>
+                    </Link>
                   </li>
                 ))}
               </ul>

@@ -1,27 +1,14 @@
 import { useState } from 'react'
 import { motion } from 'motion/react'
 import { Check } from 'lucide-react'
-import type { Platform, Project, Tone } from '#/types/project-types'
+import type { Project } from '#/types/project-types'
 import { PageHeading, ProjectGrid } from './project-grid'
 import { projectApi } from '#/utils/projects-utils/mock-api'
 import { EASE_OUT, rise, stagger } from '#/utils/dashboard-contants'
 import { SceneStill } from './scene-still'
 import { ChipGroup } from './chip-group'
 import { BriefCard, GenerateCard } from './side-panel'
-
-const PLATFORMS: { value: Platform; label: string }[] = [
-  { value: 'tiktok', label: 'TikTok' },
-  { value: 'reels', label: 'Instagram Reels' },
-  { value: 'shorts', label: 'YouTube Shorts' },
-  { value: 'instagram', label: 'Instagram' },
-]
-
-const TONES: { value: Tone; label: string }[] = [
-  { value: 'casual', label: 'Casual' },
-  { value: 'energetic', label: 'Energetic' },
-  { value: 'premium', label: 'Calm and premium' },
-  { value: 'funny', label: 'Funny' },
-]
+import { PLATFORMS, TONES } from '#/utils/projects-utils/constants'
 
 /** Shown right after Send, while the storyboard is being written. */
 export function DraftingView({ project }: { project: Project }) {

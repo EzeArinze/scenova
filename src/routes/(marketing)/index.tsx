@@ -1,19 +1,3 @@
-// import { createFileRoute } from '@tanstack/react-router'
-// // import { Hero } from './-components/hero'
-// import Features from './-components/features'
-// import { NewHero } from './-components/new-hero'
-
-// export const Route = createFileRoute('/(marketing)/')({ component: Home })
-
-// function Home() {
-//   return (
-//     <>
-//       <NewHero />
-//       <Features />
-//     </>
-//   )
-// }
-
 import { createFileRoute } from '@tanstack/react-router'
 import Features from './-components/features'
 import { NewHero } from './-components/new-hero'

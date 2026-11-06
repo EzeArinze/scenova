@@ -1,13 +1,20 @@
+import { linkOptions } from '@tanstack/react-router'
+
 export const siteConfig = {
   name: 'Scenova',
-  cta: { label: 'Get started free', href: '#get-started' },
-  demo: { label: 'Watch demo', href: '#demo' },
-  login: { label: 'Log in', href: '/signin' },
-  nav: [
-    { label: 'Product', href: '#product' },
-    { label: 'How it works', href: '#how-it-works' },
-    { label: 'Pricing', href: '#pricing' },
-  ],
+  cta: linkOptions({ label: 'Get started free', to: '/dashboard' }),
+  demo: linkOptions({ label: 'Watch demo', to: '/' }),
+  login: linkOptions({ label: 'Log in', to: '/signin' }),
+  nav: linkOptions([
+    { id: 'product', label: 'Product', to: '/', hash: 'product' },
+    {
+      id: 'how-it-works',
+      label: 'How it works',
+      to: '/',
+      hash: 'how-it-works',
+    },
+    { id: 'pricing', label: 'Pricing', to: '/', hash: 'pricing' },
+  ]),
 } as const
 
 export const MEDIA = {
