@@ -38,7 +38,7 @@ export function PresenterPicker({
           >
             <span
               aria-hidden
-              className="relative block size-[72px] overflow-hidden rounded-full"
+              className="relative block size-18 overflow-hidden rounded-full"
               style={{ background: p.gradient }}
             >
               <svg viewBox="0 0 72 72" className="absolute inset-0 size-full">
@@ -50,7 +50,7 @@ export function PresenterPicker({
               </svg>
             </span>
             {selected && (
-              <span className="absolute top-2.5 right-2.5 grid size-[22px] place-items-center rounded-full bg-primary text-primary-foreground">
+              <span className="absolute top-2.5 right-2.5 grid size-5.5 place-items-center rounded-full bg-primary text-primary-foreground">
                 <Check aria-hidden className="size-3" />
               </span>
             )}
@@ -71,7 +71,7 @@ export function PresenterPicker({
             'justify-center gap-2.5 border-dashed border-border text-[13px] font-semibold text-muted-foreground',
           )}
         >
-          <LayoutGrid aria-hidden className="size-[22px]" />
+          <LayoutGrid aria-hidden className="size-5.5" />
           Browse all
         </button>
       )}
@@ -88,7 +88,7 @@ export function PresenterPicker({
             : 'border-border text-muted-foreground',
         )}
       >
-        <Ban aria-hidden className="size-[22px]" />
+        <Ban aria-hidden className="size-5.5" />
         No presenter
       </button>
     </div>

@@ -25,7 +25,7 @@ export function BriefCard({ project }: { project: Project }) {
   ].filter(Boolean)
 
   return (
-    <section className="space-y-3.5 rounded-[20px] border border-border bg-card p-[18px]">
+    <section className="space-y-3.5 rounded-[20px] border border-border bg-card p-4.5">
       <h2 className="text-[15px] font-bold">Your brief</h2>
 
       <div className="flex items-center gap-3">
@@ -87,7 +87,7 @@ export function FormatCard({
     ['Voice and captions', 'Auto'],
   ]
   return (
-    <section className="rounded-[20px] border border-border bg-card px-[18px] py-1.5">
+    <section className="rounded-[20px] border border-border bg-card px-4.5 py-1.5">
       <dl>
         {rows.map(([label, value]) => (
           <div
@@ -119,7 +119,7 @@ export function GenerateCard({
   onGenerate?: () => void
 }) {
   return (
-    <section className="space-y-3.5 rounded-[20px] border border-primary/30 bg-card p-[18px]">
+    <section className="space-y-3.5 rounded-[20px] border border-primary/30 bg-card p-4.5">
       <div className="flex items-end justify-between gap-3">
         <div>
           <div className="text-[13px] text-muted-foreground">This will use</div>
@@ -140,7 +140,7 @@ export function GenerateCard({
           <div className="flex items-center gap-2 text-[13px] text-foreground/90">
             <span
               aria-hidden
-              className="size-[22px] rounded-full"
+              className="size-5.5 rounded-full"
               style={{ background: presenter.gradient }}
             />
             {presenter.name} presents
@@ -152,13 +152,13 @@ export function GenerateCard({
         type="button"
         disabled={disabled}
         onClick={onGenerate}
-        className="flex h-[52px] w-full items-center justify-center gap-2.5 rounded-2xl bg-primary text-[15px] font-bold text-primary-foreground transition-[scale] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-muted disabled:text-muted-foreground disabled:active:scale-100"
+        className="flex h-13 w-full items-center justify-center gap-2.5 rounded-2xl bg-primary text-[15px] font-bold text-primary-foreground transition-[scale] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.98] disabled:cursor-not-allowed disabled:bg-muted disabled:text-muted-foreground disabled:active:scale-100"
       >
         {pending ? (
           'Drafting…'
         ) : (
           <>
-            <Sparkles aria-hidden className="size-[18px]" />
+            <Sparkles aria-hidden className="size-4.5" />
             Generate ad
           </>
         )}

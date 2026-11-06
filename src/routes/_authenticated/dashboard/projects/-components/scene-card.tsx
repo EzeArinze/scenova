@@ -85,14 +85,14 @@ export function SceneCard({
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.22, ease: EASE_OUT }}
-      className="relative flex flex-wrap gap-[18px] rounded-[20px] border border-border bg-card p-4"
+      className="relative flex flex-wrap gap-4.5 rounded-[20px] border border-border bg-card p-4"
     >
       <div className="relative shrink-0">
         <SceneStill
           kind={scene.still}
           index={index}
           label={`Preview still for scene ${n}`}
-          className="h-[170px] w-24 rounded-[14px]"
+          className="h-42.5 w-24 rounded-[14px]"
         />
         <span className="absolute top-2 left-2 grid size-6 place-items-center rounded-full bg-black/60 text-xs font-bold text-white">
           {n}
@@ -120,7 +120,7 @@ export function SceneCard({
             >
               <Minus aria-hidden className="size-4" />
             </button>
-            <span className="min-w-[34px] text-center text-[13px] font-bold tabular-nums">
+            <span className="min-w-8.5 text-center text-[13px] font-bold tabular-nums">
               {scene.seconds}s
             </span>
             <button

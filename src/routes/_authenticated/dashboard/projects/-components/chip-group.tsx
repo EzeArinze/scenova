@@ -32,7 +32,7 @@ export function ChipGroup<T extends string>({
               aria-pressed={selected}
               onClick={() => onChange(selected ? null : option.value)}
               className={cn(
-                'inline-flex h-11 items-center gap-2 rounded-full border px-[18px] text-sm font-semibold transition-[scale] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.97]',
+                'inline-flex h-11 items-center gap-2 rounded-full border px-4.5 text-sm font-semibold transition-[scale] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.97]',
                 selected
                   ? 'border-primary bg-primary/15 text-foreground'
                   : 'border-border text-foreground',

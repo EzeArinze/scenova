@@ -61,10 +61,10 @@ export function DraftingView({ project }: { project: Project }) {
                 <img
                   src={brief.photoUrls[0]}
                   alt="Your product photo"
-                  className="size-[72px] shrink-0 rounded-[14px] border border-border object-cover"
+                  className="size-18 shrink-0 rounded-[14px] border border-border object-cover"
                 />
               ) : (
-                <div className="size-[72px] shrink-0 rounded-[14px] bg-muted" />
+                <div className="size-18 shrink-0 rounded-[14px] bg-muted" />
               )}
 
               {!analysis && (
@@ -95,14 +95,14 @@ export function DraftingView({ project }: { project: Project }) {
                           confirmed: true,
                         })
                       }
-                      className="h-11 rounded-full bg-primary px-[18px] text-sm font-bold text-primary-foreground transition-[scale] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.97]"
+                      className="h-11 rounded-full bg-primary px-4.5 text-sm font-bold text-primary-foreground transition-[scale] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.97]"
                     >
                       Yes, that's it
                     </button>
                     <button
                       type="button"
                       onClick={() => setCorrecting(true)}
-                      className="h-11 rounded-full border border-border px-[18px] text-sm font-semibold transition-[scale] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.97]"
+                      className="h-11 rounded-full border border-border px-4.5 text-sm font-semibold transition-[scale] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.97]"
                     >
                       Not quite
                     </button>
@@ -131,7 +131,7 @@ export function DraftingView({ project }: { project: Project }) {
                   <button
                     type="submit"
                     disabled={!nameDraft.trim()}
-                    className="h-11 rounded-full bg-primary px-[18px] text-sm font-bold text-primary-foreground transition-[scale] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.97] disabled:opacity-40"
+                    className="h-11 rounded-full bg-primary px-4.5 text-sm font-bold text-primary-foreground transition-[scale] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.97] disabled:opacity-40"
                   >
                     Save
                   </button>
@@ -140,7 +140,7 @@ export function DraftingView({ project }: { project: Project }) {
 
               {analysis?.confirmed && (
                 <div className="flex min-w-0 flex-[1_1_15rem] items-center gap-2.5">
-                  <span className="grid size-[22px] place-items-center rounded-full bg-emerald-400/15 text-emerald-400">
+                  <span className="grid size-5.5 place-items-center rounded-full bg-emerald-400/15 text-emerald-400">
                     <Check aria-hidden className="size-3" />
                   </span>
                   <div>
@@ -157,7 +157,7 @@ export function DraftingView({ project }: { project: Project }) {
             {!brief.questionsDone && (
               <motion.section
                 variants={rise}
-                className="space-y-[22px] rounded-[20px] border border-border bg-card p-5"
+                className="space-y-5.5 rounded-[20px] border border-border bg-card p-5"
               >
                 <div className="flex flex-wrap items-baseline justify-between gap-3">
                   <h2 className="text-base font-bold">Two quick questions</h2>
@@ -218,13 +218,13 @@ export function DraftingView({ project }: { project: Project }) {
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.22, ease: EASE_OUT }}
-                  className="flex flex-wrap gap-[18px] rounded-[20px] border border-border bg-card p-4"
+                  className="flex flex-wrap gap-4.5 rounded-[20px] border border-border bg-card p-4"
                 >
                   <SceneStill
                     kind={scene.still}
                     index={i}
                     label={`Preview still for scene ${i + 1}`}
-                    className="h-[170px] w-24 shrink-0 rounded-[14px]"
+                    className="h-42.5 w-24 shrink-0 rounded-[14px]"
                   />
                   <div className="min-w-0 flex-[1_1_20rem] space-y-3">
                     <h3 className="text-base font-bold">{scene.title}</h3>
@@ -245,11 +245,11 @@ export function DraftingView({ project }: { project: Project }) {
                 <div
                   key={`skeleton-${i}`}
                   aria-hidden
-                  className="flex flex-wrap gap-[18px] rounded-[20px] border border-border bg-card p-4"
+                  className="flex flex-wrap gap-4.5 rounded-[20px] border border-border bg-card p-4"
                 >
-                  <div className="h-[170px] w-24 shrink-0 animate-pulse rounded-[14px] bg-muted motion-reduce:animate-none" />
+                  <div className="h-42.5 w-24 shrink-0 animate-pulse rounded-[14px] bg-muted motion-reduce:animate-none" />
                   <div className="min-w-0 flex-[1_1_20rem] space-y-3">
-                    <div className="h-[18px] w-32 animate-pulse rounded-md bg-muted motion-reduce:animate-none" />
+                    <div className="h-4.5 w-32 animate-pulse rounded-md bg-muted motion-reduce:animate-none" />
                     <div className="h-3.5 w-[90%] animate-pulse rounded-md bg-muted/70 motion-reduce:animate-none" />
                     <div className="h-3.5 w-2/3 animate-pulse rounded-md bg-muted/70 motion-reduce:animate-none" />
                     <div className="h-14 w-full animate-pulse rounded-xl bg-muted/50 motion-reduce:animate-none" />
