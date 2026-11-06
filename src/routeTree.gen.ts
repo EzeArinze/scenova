@@ -25,6 +25,7 @@ import { Route as AuthenticatedDashboardImagesIndexRouteImport } from './routes/
 import { Route as AuthenticatedDashboardProjectsIndexRouteImport } from './routes/_authenticated/dashboard/projects/index'
 import { Route as AuthenticatedDashboardTrashIndexRouteImport } from './routes/_authenticated/dashboard/trash/index'
 import { Route as AuthenticatedDashboardVideosIndexRouteImport } from './routes/_authenticated/dashboard/videos/index'
+import { Route as AuthenticatedDashboardProjectsProject_idIndexRouteImport } from './routes/_authenticated/dashboard/projects/$project_id/index'
 
 const marketingRouteRoute = marketingRouteRouteImport.update({
   id: '/(marketing)',
@@ -112,6 +113,12 @@ const AuthenticatedDashboardVideosIndexRoute =
     path: '/videos/',
     getParentRoute: () => AuthenticatedDashboardRouteRoute,
   } as any)
+const AuthenticatedDashboardProjectsProject_idIndexRoute =
+  AuthenticatedDashboardProjectsProject_idIndexRouteImport.update({
+    id: '/projects/$project_id/',
+    path: '/projects/$project_id/',
+    getParentRoute: () => AuthenticatedDashboardRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof marketingIndexRoute
@@ -127,6 +134,7 @@ export interface FileRoutesByFullPath {
   '/dashboard/projects/': typeof AuthenticatedDashboardProjectsIndexRoute
   '/dashboard/trash/': typeof AuthenticatedDashboardTrashIndexRoute
   '/dashboard/videos/': typeof AuthenticatedDashboardVideosIndexRoute
+  '/dashboard/projects/$project_id/': typeof AuthenticatedDashboardProjectsProject_idIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof marketingIndexRoute
@@ -141,6 +149,7 @@ export interface FileRoutesByTo {
   '/dashboard/projects': typeof AuthenticatedDashboardProjectsIndexRoute
   '/dashboard/trash': typeof AuthenticatedDashboardTrashIndexRoute
   '/dashboard/videos': typeof AuthenticatedDashboardVideosIndexRoute
+  '/dashboard/projects/$project_id': typeof AuthenticatedDashboardProjectsProject_idIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -160,6 +169,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard/projects/': typeof AuthenticatedDashboardProjectsIndexRoute
   '/_authenticated/dashboard/trash/': typeof AuthenticatedDashboardTrashIndexRoute
   '/_authenticated/dashboard/videos/': typeof AuthenticatedDashboardVideosIndexRoute
+  '/_authenticated/dashboard/projects/$project_id/': typeof AuthenticatedDashboardProjectsProject_idIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -177,6 +187,7 @@ export interface FileRouteTypes {
     | '/dashboard/projects/'
     | '/dashboard/trash/'
     | '/dashboard/videos/'
+    | '/dashboard/projects/$project_id/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -191,6 +202,7 @@ export interface FileRouteTypes {
     | '/dashboard/projects'
     | '/dashboard/trash'
     | '/dashboard/videos'
+    | '/dashboard/projects/$project_id'
   id:
     | '__root__'
     | '/(marketing)'
@@ -209,6 +221,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard/projects/'
     | '/_authenticated/dashboard/trash/'
     | '/_authenticated/dashboard/videos/'
+    | '/_authenticated/dashboard/projects/$project_id/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -332,6 +345,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardVideosIndexRouteImport
       parentRoute: typeof AuthenticatedDashboardRouteRoute
     }
+    '/_authenticated/dashboard/projects/$project_id/': {
+      id: '/_authenticated/dashboard/projects/$project_id/'
+      path: '/projects/$project_id'
+      fullPath: '/dashboard/projects/$project_id/'
+      preLoaderRoute: typeof AuthenticatedDashboardProjectsProject_idIndexRouteImport
+      parentRoute: typeof AuthenticatedDashboardRouteRoute
+    }
   }
 }
 
@@ -368,6 +388,7 @@ interface AuthenticatedDashboardRouteRouteChildren {
   AuthenticatedDashboardProjectsIndexRoute: typeof AuthenticatedDashboardProjectsIndexRoute
   AuthenticatedDashboardTrashIndexRoute: typeof AuthenticatedDashboardTrashIndexRoute
   AuthenticatedDashboardVideosIndexRoute: typeof AuthenticatedDashboardVideosIndexRoute
+  AuthenticatedDashboardProjectsProject_idIndexRoute: typeof AuthenticatedDashboardProjectsProject_idIndexRoute
 }
 
 const AuthenticatedDashboardRouteRouteChildren: AuthenticatedDashboardRouteRouteChildren =
@@ -387,6 +408,8 @@ const AuthenticatedDashboardRouteRouteChildren: AuthenticatedDashboardRouteRoute
       AuthenticatedDashboardTrashIndexRoute,
     AuthenticatedDashboardVideosIndexRoute:
       AuthenticatedDashboardVideosIndexRoute,
+    AuthenticatedDashboardProjectsProject_idIndexRoute:
+      AuthenticatedDashboardProjectsProject_idIndexRoute,
   }
 
 const AuthenticatedDashboardRouteRouteWithChildren =

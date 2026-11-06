@@ -61,7 +61,7 @@ export function PromptComposer({
   }, [prompt])
 
   const canSubmit =
-    !disabled && (prompt.trim().length > 0 || attachments.hasItems)
+    !disabled && prompt.trim().length > 0 && attachments.hasItems
 
   function submit() {
     if (!canSubmit) return
