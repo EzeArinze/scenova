@@ -11,10 +11,7 @@ import {
 import { user } from './auth.schema'
 import { project } from './project.schema'
 import { relations } from 'drizzle-orm'
-
-export type AssetKind =
-  'source_photo' | 'model_copy' | 'still' | 'video_clip' | 'final_video'
-export type AssetStatus = 'uploading' | 'ready' | 'failed'
+import { asset_status, asset_kind } from '../utils'
 
 export type AssetQualityFlags = {
   blurry?: boolean
@@ -35,18 +32,18 @@ export const asset = pgTable(
     projectId: uuid('project_id').references(() => project.id, {
       onDelete: 'cascade',
     }),
-    kind: text('kind').$type<AssetKind>().notNull(),
+    kind: text('kind', { enum: asset_kind }).notNull(),
     storageKey: text('storage_key').notNull().unique(), // u/{userId}/p/{projectId}/...
     mime: text('mime').notNull(),
     bytes: bigint('bytes', { mode: 'number' }),
     width: integer('width'),
     height: integer('height'),
     durationMs: integer('duration_ms'),
-    status: text('status').$type<AssetStatus>().notNull().default('uploading'),
+    status: text('status', { enum: asset_status })
+      .notNull()
+      .default('uploading'),
     qualityFlags: jsonb('quality_flags').$type<AssetQualityFlags>(),
-    // For generated files: which model, prompt, cost, etc.
     meta: jsonb('meta').$type<Record<string, unknown>>(),
-    // Order among a project's photos (0 = cover).
     position: integer('position').notNull().default(0),
     createdAt: timestamp('created_at').defaultNow().notNull(),
     deletedAt: timestamp('deleted_at'),

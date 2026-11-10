@@ -6,15 +6,16 @@ import {
   index,
   jsonb,
   uuid,
+  pgEnum,
 } from 'drizzle-orm/pg-core'
 import { user } from './auth.schema'
 import { scene } from './scene.schema'
 import { presenter } from './presenter.schema'
 import { asset } from './assets.schema'
+import { project_mode } from '../utils'
 
-// Status/kind columns are plain text with a TS union (not pg enums) so adding
+// Status columns are plain text with a TS union (not pg enums) so adding
 // a value later (e.g. 'generating', 'done') needs no migration.
-export type ProjectMode = 'photo' | 'ugc' | 'template'
 export type ProjectStatus = 'drafting' | 'ready' | 'generating' | 'done'
 
 export type ProjectSettings = {
@@ -32,6 +33,8 @@ export type ProjectAnalysis = {
   questionsDone?: boolean // user finished or skipped the quick questions
 }
 
+export const mode = pgEnum('mode', project_mode)
+
 export const project = pgTable(
   'project',
   {
@@ -40,7 +43,7 @@ export const project = pgTable(
       .notNull()
       .references(() => user.id, { onDelete: 'cascade' }),
     title: text('title').notNull().default('Untitled ad'),
-    mode: text('mode').$type<ProjectMode>().notNull().default('photo'),
+    mode: mode().notNull().default('photo'),
     status: text('status').$type<ProjectStatus>().notNull().default('drafting'),
     brief: text('brief').notNull().default(''),
     settings: jsonb('settings')
