@@ -61,7 +61,7 @@ export class ForbiddenError extends AppError {
   }
 }
 
-export function handleError(error: unknown): ErrorResponse {
+export function errorHandler(error: unknown): ErrorResponse {
   // Known application errors
   if (error instanceof AppError) {
     return {
