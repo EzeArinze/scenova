@@ -1,21 +1,10 @@
 import { UnauthorizedMiddleware } from '#/middleware/middleware'
 import { createServerFn } from '@tanstack/react-start'
-import { analysisPatchSchema, settingsSchema } from './schema'
-import z from 'zod'
+import { updateProjectSchema } from './schema'
 import { project } from '#/db/schemas/project.schema'
 import { and, eq, isNull } from 'drizzle-orm'
 import { sql } from 'drizzle-orm/sql/sql'
 import db from '#/db'
-
-const updateProjectSchema = z.object({
-  projectId: z.string().uuid(),
-  title: z.string().trim().min(1).max(120).optional(),
-  brief: z.string().trim().max(2000).optional(),
-  settings: settingsSchema.partial().optional(),
-  // null = "No presenter" (voice-over)
-  presenterId: z.string().uuid().nullable().optional(),
-  analysis: analysisPatchSchema.optional(),
-})
 
 export const updateProject = createServerFn({ method: 'POST' })
   .middleware([UnauthorizedMiddleware])

@@ -18,3 +18,13 @@ export const analysisPatchSchema = z
     questionsDone: z.boolean(),
   })
   .partial()
+
+export const updateProjectSchema = z.object({
+  projectId: z.string().uuid(),
+  title: z.string().trim().min(1).max(120).optional(),
+  brief: z.string().trim().max(2000).optional(),
+  settings: settingsSchema.partial().optional(),
+  // null = "No presenter" (voice-over)
+  presenterId: z.string().uuid().nullable().optional(),
+  analysis: analysisPatchSchema.optional(),
+})
