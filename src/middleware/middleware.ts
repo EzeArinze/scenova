@@ -1,3 +1,4 @@
+import { UnauthorizedError } from '#/utils/error'
 import { auth } from '@/lib/auth'
 import { redirect } from '@tanstack/react-router'
 import { createMiddleware } from '@tanstack/react-start'
@@ -43,3 +44,13 @@ export const authMiddleware = createMiddleware({ type: 'request' }).server(
     })
   },
 )
+
+export const UnauthorizedMiddleware = createMiddleware({
+  type: 'function',
+}).server(async ({ next }) => {
+  const session = await auth.api.getSession({ headers: getRequestHeaders() })
+  if (!session) throw new UnauthorizedError('Unauthorized access')
+  return next({
+    context: { user: session.user, session: session.session },
+  })
+})
