@@ -4,7 +4,7 @@ import { UnauthorizedMiddleware } from '#/middleware/middleware'
 import { createServerFn } from '@tanstack/react-start'
 import { and, count, eq, isNull, max } from 'drizzle-orm'
 import { scene } from '#/db/schemas/scene.schema'
-import { DEFAULT_SCENE_SECONDS, MAX_SCENES } from '../projects'
+import { DEFAULT_SCENE_SECONDS, MAX_SCENES } from '..'
 import { projectId } from './schema'
 
 export const addScene = createServerFn({ method: 'POST' })

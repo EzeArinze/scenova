@@ -4,7 +4,7 @@ import { UnauthorizedMiddleware } from '#/middleware/middleware'
 import { createServerFn } from '@tanstack/react-start'
 import { eq } from 'drizzle-orm'
 import z from 'zod'
-import { requireScene } from '../projects'
+import { requireScene } from '..'
 
 export const deleteScene = createServerFn({ method: 'POST' })
   .middleware([UnauthorizedMiddleware])

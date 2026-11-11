@@ -1,6 +1,6 @@
 import { UnauthorizedMiddleware } from '#/middleware/middleware'
 import { createServerFn } from '@tanstack/react-start'
-import { requireScene } from '../projects'
+import { requireScene } from '..'
 import db from '#/db'
 import { project, scene } from '#/db/schema'
 import { asc, eq } from 'drizzle-orm'
