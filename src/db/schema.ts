@@ -1,1 +1,5 @@
 export * from './schemas/auth.schema'
+export * from './schemas/project.schema'
+export * from './schemas/assets.schema'
+export * from './schemas/presenter.schema'
+export * from './schemas/scene.schema'
