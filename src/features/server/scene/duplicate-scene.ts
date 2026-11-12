@@ -1,38 +1,55 @@
 import { UnauthorizedMiddleware } from '#/middleware/middleware'
 import { createServerFn } from '@tanstack/react-start'
-import { MAX_SCENES, requireScene } from '..'
+import { MAX_SCENES } from '..'
 import db from '#/db'
-import { project, scene } from '#/db/schema'
+import { scene } from '#/db/schema'
 import { and, eq, sql } from 'drizzle-orm'
 import z from 'zod'
+import { lockProjectByScene } from '../helpers'
 
 export const duplicateScene = createServerFn({ method: 'POST' })
   .middleware([UnauthorizedMiddleware])
   .validator(z.object({ id: z.string().uuid() }))
   .handler(async ({ data, context }) => {
-    const s = await requireScene(data.id, context.user.id)
     return db.transaction(async (tx) => {
-      const count = await tx
-        .select({ id: scene.id })
+      // 1. Lock the owning project, check ownership + not trashed, bump updatedAt.
+      const p = await lockProjectByScene(tx, data.id, context.user.id)
+
+      // 2. Fresh read of the scene plus the scene count, in one query.
+      const [s] = await tx
+        .select({
+          projectId: scene.projectId,
+          position: scene.position,
+          spokenLine: scene.spokenLine,
+          visual: scene.visual,
+          seconds: scene.seconds,
+          stillAssetId: scene.stillAssetId,
+          total: tx.$count(scene, eq(scene.projectId, p.id)),
+        })
         .from(scene)
-        .where(eq(scene.projectId, s.projectId))
-      if (count.length >= MAX_SCENES) {
+        .where(eq(scene.id, data.id))
+
+      if (!s) throw new Error('Scene not found')
+      if (s.total >= MAX_SCENES) {
         throw new Error(`A storyboard can have at most ${MAX_SCENES} scenes`)
       }
-      // Make room right after the original, then insert the copy there.
+
+      // 3. Make room right after the original.
       await tx
         .update(scene)
         .set({ position: sql`${scene.position} + 1` })
         .where(
           and(
-            eq(scene.projectId, s.projectId),
+            eq(scene.projectId, p.id),
             sql`${scene.position} > ${s.position}`,
           ),
         )
+
+      // 4. Insert the copy.
       const [row] = await tx
         .insert(scene)
         .values({
-          projectId: s.projectId,
+          projectId: p.id,
           position: s.position + 1,
           spokenLine: s.spokenLine,
           visual: s.visual,
@@ -40,10 +57,7 @@ export const duplicateScene = createServerFn({ method: 'POST' })
           stillAssetId: s.stillAssetId,
         })
         .returning({ id: scene.id })
-      await tx
-        .update(project)
-        .set({ updatedAt: new Date() })
-        .where(eq(project.id, s.projectId))
+
       return { id: row.id }
     })
   })

@@ -1,9 +1,9 @@
 import { UnauthorizedMiddleware } from '#/middleware/middleware'
 import { createServerFn } from '@tanstack/react-start'
-import { requireScene } from '..'
 import db from '#/db'
 import { project, scene } from '#/db/schema'
-import { asc, eq } from 'drizzle-orm'
+import { lockProjectByScene } from '../helpers'
+import { asc, eq, inArray, sql } from 'drizzle-orm'
 import z from 'zod'
 
 const moveSceneSchema = z.object({
@@ -15,34 +15,52 @@ export const moveScene = createServerFn({ method: 'POST' })
   .middleware([UnauthorizedMiddleware])
   .validator(moveSceneSchema)
   .handler(async ({ data, context }) => {
-    const s = await requireScene(data.id, context.user.id)
-    await db.transaction(async (tx) => {
+    return db.transaction(async (tx) => {
+      // 1. Lock the owning project (also checks ownership + not trashed).
+      const p = await lockProjectByScene(tx, data.id, context.user.id)
+
+      // 2. Fresh ordered list, now safe from concurrent edits.
       const list = await tx
         .select({ id: scene.id, position: scene.position })
         .from(scene)
-        .where(eq(scene.projectId, s.projectId))
+        .where(eq(scene.projectId, p.id))
         .orderBy(asc(scene.position), asc(scene.createdAt))
 
-      const from = list.findIndex((r) => r.id === s.id)
+      const from = list.findIndex((r) => r.id === data.id)
+      if (from < 0) throw new Error('Scene not found')
+
       const to = data.direction === 'up' ? from - 1 : from + 1
-      if (from < 0 || to < 0 || to >= list.length) return
+      if (to < 0 || to >= list.length) return { ok: true as const } // already at the edge
 
       const next = [...list]
       ;[next[from], next[to]] = [next[to], next[from]]
 
-      // Renumber 0..n-1 so gaps left by deletes are cleaned up too.
-      for (let i = 0; i < next.length; i++) {
-        if (next[i].position !== i) {
-          await tx
-            .update(scene)
-            .set({ position: i })
-            .where(eq(scene.id, next[i].id))
-        }
+      // 3. Renumber 0..n-1 in ONE statement, only for rows that changed.
+      const changed = next
+        .map((r, i) => ({ id: r.id, position: i, old: r.position }))
+        .filter((r) => r.position !== r.old)
+
+      if (changed.length > 0) {
+        const cases = changed.map(
+          (c) => sql`when ${scene.id} = ${c.id} then ${c.position}::int`,
+        )
+        await tx
+          .update(scene)
+          .set({ position: sql`(case ${sql.join(cases, sql` `)} end)` })
+          .where(
+            inArray(
+              scene.id,
+              changed.map((c) => c.id),
+            ),
+          )
+
+        // 4. Bump updatedAt only when something actually changed.
+        await tx
+          .update(project)
+          .set({ updatedAt: new Date() })
+          .where(eq(project.id, p.id))
       }
-      await tx
-        .update(project)
-        .set({ updatedAt: new Date() })
-        .where(eq(project.id, s.projectId))
+
+      return { ok: true as const }
     })
-    return { ok: true as const }
   })

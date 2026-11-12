@@ -1,6 +1,7 @@
 import db from '#/db'
 import { project, scene } from '#/db/schema'
-import { and, eq, isNull } from 'drizzle-orm'
+import { and, eq } from 'drizzle-orm'
+import { userLiveProjects } from './helpers'
 
 const MIN_SCENE_SECONDS = 3
 const MAX_SCENE_SECONDS = 8
@@ -30,13 +31,7 @@ export async function requireScene(sceneId: string, userId: string) {
     })
     .from(scene)
     .innerJoin(project, eq(project.id, scene.projectId))
-    .where(
-      and(
-        eq(scene.id, sceneId),
-        eq(project.userId, userId),
-        isNull(project.deletedAt),
-      ),
-    )
+    .where(and(eq(scene.id, sceneId), userLiveProjects(userId)))
     .limit(1)
 
   if (!row) throw new Error('Scene not found')
