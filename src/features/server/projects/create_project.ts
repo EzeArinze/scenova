@@ -5,7 +5,7 @@ import { settingsSchema } from './schema'
 import db from '#/db'
 import { project } from '#/db/schema'
 
-const createProjectSchema = z.object({
+export const createProjectSchema = z.object({
   brief: z.string().trim().max(2000).default(''),
   mode: z.enum(['photo', 'ugc', 'template']),
   settings: settingsSchema.optional(),

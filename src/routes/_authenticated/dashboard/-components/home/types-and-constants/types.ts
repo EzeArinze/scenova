@@ -7,7 +7,7 @@ export type ComposerSettings = {
   variations: number
 }
 
-export type ComposerDraft = {
+export type ComposerValue = {
   prompt: string
   images: File[]
   useAvatar: boolean
@@ -21,7 +21,7 @@ export type PromptComposerHandle = {
 }
 
 export type PromptComposerProps = {
-  onSubmit: (draft: ComposerDraft) => void
+  onSubmit: (draft: ComposerValue) => void
   disabled?: boolean
   ref?: Ref<PromptComposerHandle>
 }

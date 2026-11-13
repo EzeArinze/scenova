@@ -9,7 +9,7 @@ import { stagger } from '#/utils/dashboard-contants'
 import { HomeEmpty } from './-components/home/home-empty'
 import { userObjectConstructor } from '#/utils/user-object-constructor'
 import type {
-  ComposerDraft,
+  ComposerValue,
   PromptComposerHandle,
 } from './-components/home/types-and-constants/types'
 import { createProject } from '#/utils/projects-utils/mock-api'
@@ -41,7 +41,7 @@ function RouteComponent() {
       toast.add({ type: 'info', description: 'Comming Soon...' })
   }
 
-  function handleSubmit(draft: ComposerDraft) {
+  function handleSubmit(draft: ComposerValue) {
     if (draft.images.length === 0) {
       // setMissingPhoto(true)
       return

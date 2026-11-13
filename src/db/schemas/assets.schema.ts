@@ -28,7 +28,6 @@ export const asset = pgTable(
     userId: text('user_id')
       .notNull()
       .references(() => user.id, { onDelete: 'cascade' }),
-    // Nullable so a file can live in the Assets library without a project.
     projectId: uuid('project_id').references(() => project.id, {
       onDelete: 'cascade',
     }),
