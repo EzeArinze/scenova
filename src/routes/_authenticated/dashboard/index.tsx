@@ -83,7 +83,6 @@ function RouteComponent() {
         )}
       </main>
 
-      {/* The composer stays in every state, with or without media. */}
       <div className="sticky bottom-0 bg-linear-to-t from-background via-background to-transparent px-4 pt-6 pb-4 md:px-6">
         <PromptComposer ref={composerRef} onSubmit={handleSubmit} />
       </div>
