@@ -16,7 +16,14 @@ export type AssetStatusType = (typeof asset_status)[number]
 export const project_mode = ['photo', 'ugc', 'template'] as const
 
 export type ProjectModeType = (typeof project_mode)[number]
-export type ProjectStatus = 'drafting' | 'ready' | 'generating' | 'done'
+
+export const ProjectStatus = [
+  'drafting',
+  'ready',
+  'generating',
+  'done',
+] as const
+export type ProjectStatusType = (typeof ProjectStatus)[number]
 
 export type ProjectSettings = {
   ratio: '9:16' | '1:1' | '16:9'

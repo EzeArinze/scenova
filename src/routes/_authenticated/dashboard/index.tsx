@@ -12,8 +12,8 @@ import type {
   ComposerValue,
   PromptComposerHandle,
 } from './-components/home/types-and-constants/types'
-import { createProject } from '#/utils/projects-utils/mock-api'
 import { toast } from '#/components/ui/toast'
+import { useCreateProject } from '#/features/mutations/use-create-project'
 
 export const Route = createFileRoute('/_authenticated/dashboard/')({
   component: RouteComponent,
@@ -26,6 +26,7 @@ function RouteComponent() {
   const { firstName, name } = userObjectConstructor({ user: auth })
   const reduceMotion = useReducedMotion()
   const composerRef = useRef<PromptComposerHandle>(null)
+  const createProject = useCreateProject()
 
   // TODO: replace with the real loader (projects + assets, filtered by `query`).
   const media: MediaItem[] = []
@@ -36,29 +37,33 @@ function RouteComponent() {
       composerRef.current?.setAvatar(true)
       composerRef.current?.focus()
     }
-    // 'template': no templates route yet.
+
     if (action === 'template')
       toast.add({ type: 'info', description: 'Comming Soon...' })
   }
 
   function handleSubmit(draft: ComposerValue) {
-    if (draft.images.length === 0) {
+    if (draft.images.length === 0 || createProject.isPending) {
       // setMissingPhoto(true)
       return
     }
-    // setMissingPhoto(false)
 
-    const projectId = createProject({
-      idea: draft.prompt,
-      images: draft.images,
-      useAvatar: draft.useAvatar,
-      ratio: draft.settings.ratio,
-      versions: draft.settings.variations,
-    })
-    void navigate({
-      to: '/dashboard/projects/$project_id',
-      params: { project_id: projectId },
-    })
+    createProject.mutate(
+      {
+        idea: draft.prompt,
+        useAvatar: draft.useAvatar,
+        ratio: draft.settings.ratio,
+        versions: draft.settings.variations,
+      },
+      {
+        onSuccess: ({ id }) => {
+          navigate({
+            to: '/dashboard/projects/$project_id',
+            params: { project_id: id },
+          })
+        },
+      },
+    )
   }
 
   const UserName = firstName || name

@@ -12,11 +12,7 @@ import { user } from './auth.schema'
 import { scene } from './scene.schema'
 import { presenter } from './presenter.schema'
 import { asset } from './assets.schema'
-import { project_mode } from '../utils'
-
-// Status columns are plain text with a TS union (not pg enums) so adding
-// a value later (e.g. 'generating', 'done') needs no migration.
-export type ProjectStatus = 'drafting' | 'ready' | 'generating' | 'done'
+import { project_mode, ProjectStatus } from '../utils'
 
 export type ProjectSettings = {
   ratio: '9:16' | '1:1' | '16:9'
@@ -34,6 +30,7 @@ export type ProjectAnalysis = {
 }
 
 export const mode = pgEnum('mode', project_mode)
+export const project_status = pgEnum('project_status', ProjectStatus)
 
 export const project = pgTable(
   'project',
@@ -44,7 +41,7 @@ export const project = pgTable(
       .references(() => user.id, { onDelete: 'cascade' }),
     title: text('title').notNull().default('Untitled ad'),
     mode: mode().notNull().default('photo'),
-    status: text('status').$type<ProjectStatus>().notNull().default('drafting'),
+    status: project_status().notNull().default('drafting'),
     brief: text('brief').notNull().default(''),
     settings: jsonb('settings')
       .$type<ProjectSettings>()

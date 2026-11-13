@@ -1,7 +1,6 @@
-import { useMutation } from '@tanstack/react-query'
-import { useNavigate } from '@tanstack/react-router'
-import { toast } from '#/components/ui/toast'
+import { useAppMutation } from '#/utils/mutate'
 import { createProject } from '../server/projects/create_project'
+import { projectKeys } from '../querries.ts/project-querries'
 
 export type NewProjectInput = {
   idea: string
@@ -10,16 +9,8 @@ export type NewProjectInput = {
   versions: number
 }
 
-type NavigateFn = ReturnType<typeof useNavigate>
-
-/**
- * Saves a project, then goes straight to its page.
- * Photos are not sent yet: the Tigris upload step comes next.
- */
-export function useCreateProject({ navigate }: { navigate: NavigateFn }) {
-  // const navigate = useNavigate()
-
-  return useMutation({
+export function useCreateProject() {
+  return useAppMutation({
     mutationFn: (input: NewProjectInput) =>
       createProject({
         data: {
@@ -28,17 +19,7 @@ export function useCreateProject({ navigate }: { navigate: NavigateFn }) {
           settings: { ratio: input.ratio, variations: input.versions },
         },
       }),
-    onSuccess: ({ id }) =>
-      navigate({
-        to: '/dashboard/projects/$project_id',
-        params: { project_id: id },
-      }),
-    onError: (error) => {
-      console.error(error)
-      toast.add({
-        type: 'error',
-        description: "Couldn't create your project. Please try again.",
-      })
-    },
+    errorMessage: "Couldn't create your project. Please try again.",
+    invalidates: [projectKeys.all],
   })
 }
