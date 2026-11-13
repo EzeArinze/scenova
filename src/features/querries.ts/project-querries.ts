@@ -12,7 +12,7 @@ export const projectQuery = (id: string) =>
     queryKey: projectKeys.detail(id),
     queryFn: () => getProject({ data: { id } }),
     refetchInterval: (query) =>
-      query.state.data?.project.status === 'drafting' ? 1000 : false,
+      query.state.data?.project.status === 'drafting' ? 3000 : false,
     retry: false, // a wrong id should show "not found" at once, not after retries
   })
 
