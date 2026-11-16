@@ -54,6 +54,7 @@ function RouteComponent() {
         useAvatar: draft.useAvatar,
         ratio: draft.settings.ratio,
         versions: draft.settings.variations,
+        images: draft.images,
       },
       {
         onSuccess: ({ id }) => {

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { measureImage } from '#/utils/measure-image'
-import { uploadFile } from '#/features/image-s3-upload.ts/upload-file'
+import { uploadFile } from '#/features/image-s3-actions.ts/upload-file'
 
 export type UploadedImage = { key: string; width?: number; height?: number }
 
@@ -17,7 +17,7 @@ export type Attachment = {
 
 type Options = { userId: string; max?: number }
 
-const MAX_BYTES = 10 * 1024 * 1024
+export const MAX_BYTES = 10 * 1024 * 1024
 
 export function useImageAttachments({ userId, max = 4 }: Options) {
   const [items, setItems] = useState<Attachment[]>([])
