@@ -6,7 +6,7 @@ import { imageSchema, settingsSchema } from './schema'
 import db from '#/db'
 import { asset, project, type NewAsset } from '#/db/schema'
 
-const MAX_IMAGE_BYTES = 10 * 1024 * 1024
+export const MAX_IMAGE_BYTES = 10 * 1024 * 1024
 
 export const createProjectSchema = z.object({
   brief: z.string().trim().max(2000).default(''),

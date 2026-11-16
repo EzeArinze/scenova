@@ -17,7 +17,7 @@ export type Attachment = {
 
 type Options = { userId: string; max?: number }
 
-export const MAX_BYTES = 10 * 1024 * 1024
+const MAX_BYTES = 10 * 1024 * 1024
 
 export function useImageAttachments({ userId, max = 4 }: Options) {
   const [items, setItems] = useState<Attachment[]>([])
