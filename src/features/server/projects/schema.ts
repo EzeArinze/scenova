@@ -28,3 +28,9 @@ export const updateProjectSchema = z.object({
   presenterId: z.string().uuid().nullable().optional(),
   analysis: analysisPatchSchema.optional(),
 })
+
+export const imageSchema = z.object({
+  key: z.string().min(1),
+  width: z.number().int().positive().optional(),
+  height: z.number().int().positive().optional(),
+})

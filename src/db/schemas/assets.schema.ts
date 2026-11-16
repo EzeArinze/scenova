@@ -32,7 +32,7 @@ export const asset = pgTable(
       onDelete: 'cascade',
     }),
     kind: text('kind', { enum: asset_kind }).notNull(),
-    storageKey: text('storage_key').notNull().unique(), // u/{userId}/p/{projectId}/...
+    storageKey: text('storage_key').notNull().unique(),
     mime: text('mime').notNull(),
     bytes: bigint('bytes', { mode: 'number' }),
     width: integer('width'),

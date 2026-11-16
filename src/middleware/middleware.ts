@@ -54,3 +54,18 @@ export const UnauthorizedMiddleware = createMiddleware({
     context: { user: session.user, session: session.session },
   })
 })
+
+export const apiMiddleware = createMiddleware({ type: 'request' }).server(
+  async ({ next }) => {
+    const headers = getRequestHeaders()
+    const session = await auth.api.getSession({ headers })
+
+    if (!session) {
+      throw new UnauthorizedError('Unauthorized access')
+    }
+
+    return next({
+      context: { user: session.user, session: session.session },
+    })
+  },
+)

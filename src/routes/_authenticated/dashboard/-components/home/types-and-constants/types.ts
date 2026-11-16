@@ -1,5 +1,6 @@
 import type { Ref } from 'react'
 import type { RATIOS } from './constant'
+import type { UploadedImage } from '#/hooks/use-image-attachments'
 
 export type ComposerSettings = {
   ratio: (typeof RATIOS)[number]
@@ -9,7 +10,7 @@ export type ComposerSettings = {
 
 export type ComposerValue = {
   prompt: string
-  images: File[]
+  images: UploadedImage[]
   useAvatar: boolean
   settings: ComposerSettings
 }
@@ -24,4 +25,5 @@ export type PromptComposerProps = {
   onSubmit: (draft: ComposerValue) => void
   disabled?: boolean
   ref?: Ref<PromptComposerHandle>
+  userId: string
 }
