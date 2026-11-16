@@ -26,4 +26,5 @@ export type PromptComposerProps = {
   disabled?: boolean
   ref?: Ref<PromptComposerHandle>
   userId: string
+  isCreating?: boolean
 }

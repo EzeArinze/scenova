@@ -70,7 +70,7 @@ export function Nav() {
                   </Avatar>
                 </div>
               }
-              session={{ user, initials, avatarUrl }}
+              session={{ user }}
             />
           ) : (
             <Link

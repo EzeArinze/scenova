@@ -89,6 +89,7 @@ function RouteComponent() {
           ref={composerRef}
           onSubmit={handleSubmit}
           userId={auth.id}
+          isCreating={createProject.isPending}
         />
       </div>
     </motion.div>

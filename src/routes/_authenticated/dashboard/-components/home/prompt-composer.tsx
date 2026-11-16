@@ -1,6 +1,6 @@
 import { useEffect, useImperativeHandle, useRef, useState } from 'react'
 import type { KeyboardEvent } from 'react'
-import { ArrowRight, Check, Plus } from 'lucide-react'
+import { ArrowRight, Check, Loader2, Plus } from 'lucide-react'
 import { cn } from 'cn'
 import {
   Popover,
@@ -29,6 +29,7 @@ export function PromptComposer({
   disabled,
   ref,
   userId,
+  isCreating,
 }: PromptComposerProps) {
   const [prompt, setPrompt] = useState('')
   const [useAvatar, setUseAvatar] = useState(false)
@@ -209,14 +210,18 @@ export function PromptComposer({
 
             <button
               type="submit"
-              disabled={!canSubmit}
+              disabled={!canSubmit || isCreating}
               aria-label="Create ad"
               className={cn(
                 'grid size-9 place-items-center rounded-full bg-primary text-primary-foreground transition-[scale,opacity] duration-150 active:scale-[0.97] disabled:opacity-40',
                 EASE,
               )}
             >
-              <ArrowRight aria-hidden className="size-4" />
+              {isCreating ? (
+                <Loader2 className="size-4 animate-spin" />
+              ) : (
+                <ArrowRight aria-hidden className="size-4" />
+              )}
             </button>
           </div>
         </div>

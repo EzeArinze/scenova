@@ -1,5 +1,4 @@
 import type { ReactElement } from 'react'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -22,8 +21,6 @@ type Props = {
   align?: 'start' | 'center' | 'end'
   session: {
     user: User
-    initials: string
-    avatarUrl: string
   }
 }
 
@@ -51,7 +48,7 @@ export function UserDropdown({
   trigger,
   defaultOpen,
   align = 'end',
-  session: { user, avatarUrl, initials },
+  session: { user },
 }: Props) {
   const navigate = useNavigate()
 
@@ -88,14 +85,6 @@ export function UserDropdown({
           <DropdownMenuGroup>
             {/* User Info */}
             <DropdownMenuLabel className="flex items-center gap-3 px-4 py-3">
-              <div className="relative">
-                <Avatar className="size-10">
-                  <AvatarImage src={avatarUrl} alt={user.name} />
-                  <AvatarFallback>{initials}</AvatarFallback>
-                </Avatar>
-                <span className="ring-card absolute right-0 bottom-0 size-2 rounded-full bg-green-600 ring-2" />
-              </div>
-
               <div className="flex flex-col">
                 <span className="text-popover-foreground text-sm font-medium">
                   {user.name}
