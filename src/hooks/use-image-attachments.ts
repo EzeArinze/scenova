@@ -1,36 +1,41 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { discard } from '#/features/image-s3-actions.ts/remove-file'
 import { measureImage } from '#/utils/measure-image'
+import { nanoid } from 'nanoid'
 import { uploadFile } from '#/features/image-s3-actions.ts/upload-file'
 
 export type UploadedImage = { key: string; width?: number; height?: number }
 
 export type Attachment = {
   id: string
+  key: string
   file: File
-  url: string // local blob URL, used for previews only
+  url: string
   status: 'uploading' | 'done' | 'error'
   progress: number
-  key?: string
   width?: number
   height?: number
 }
 
 type Options = { userId: string; max?: number }
 
-export const MAX_BYTES = 10 * 1024 * 1024
+const MAX_BYTES = 10 * 1024 * 1024
+
+const safeName = (name: string) => name.replace(/[^\w.-]+/g, '_').slice(-80)
 
 export function useImageAttachments({ userId, max = 4 }: Options) {
   const [items, setItems] = useState<Attachment[]>([])
   const itemsRef = useRef(items)
   itemsRef.current = items
 
+  // Revoke blob URLs on unmount. Do NOT delete from Tigris here:
+  // after a successful submit the composer unmounts and those files are in use.
   useEffect(
     () => () => itemsRef.current.forEach((i) => URL.revokeObjectURL(i.url)),
     [],
   )
 
   const patch = useCallback((id: string, p: Partial<Attachment>) => {
-    // No-op if the item was removed while uploading.
     setItems((prev) => prev.map((i) => (i.id === id ? { ...i, ...p } : i)))
   }, [])
 
@@ -38,19 +43,26 @@ export function useImageAttachments({ userId, max = 4 }: Options) {
     async (item: Attachment) => {
       patch(item.id, { status: 'uploading', progress: 0 })
       try {
-        const [key, size] = await Promise.all([
-          uploadFile(item.file, userId, (progress) =>
+        const [, size] = await Promise.all([
+          uploadFile(item.file, item.key, (progress) =>
             patch(item.id, { progress }),
           ),
           measureImage(item.file),
         ])
-        patch(item.id, { status: 'done', progress: 100, key, ...size })
+
+        // Removed while it was uploading: the file landed after the user
+        // discarded it, so delete it now.
+        if (!itemsRef.current.some((i) => i.id === item.id)) {
+          discard(item.key)
+          return
+        }
+        patch(item.id, { status: 'done', progress: 100, ...size })
       } catch (err) {
         console.error(err)
         patch(item.id, { status: 'error' })
       }
     },
-    [userId, patch],
+    [patch],
   )
 
   const add = useCallback(
@@ -62,23 +74,31 @@ export function useImageAttachments({ userId, max = 4 }: Options) {
       if (!images.length || room <= 0) return
 
       const next: Attachment[] = images.slice(0, room).map((file) => ({
-        id: crypto.randomUUID(),
+        id: nanoid(),
+        key: `${userId}/${nanoid()}-${safeName(file.name)}`,
         file,
         url: URL.createObjectURL(file),
         status: 'uploading',
         progress: 0,
       }))
-      itemsRef.current = [...itemsRef.current, ...next] // keeps room math right on rapid calls
+      itemsRef.current = [...itemsRef.current, ...next]
       setItems((prev) => [...prev, ...next])
       next.forEach((item) => void start(item))
     },
-    [max, start],
+    [max, userId, start],
   )
 
   const remove = useCallback((id: string) => {
     const target = itemsRef.current.find((i) => i.id === id)
-    if (target) URL.revokeObjectURL(target.url)
+    if (!target) return
+
+    URL.revokeObjectURL(target.url)
+    itemsRef.current = itemsRef.current.filter((i) => i.id !== id)
     setItems((prev) => prev.filter((i) => i.id !== id))
+
+    // Only a finished upload exists in Tigris yet. An in-flight one is
+    // cleaned up by `start` when it finishes (see above).
+    if (target.status === 'done') discard(target.key)
   }, [])
 
   const retry = useCallback(
@@ -89,11 +109,9 @@ export function useImageAttachments({ userId, max = 4 }: Options) {
     [start],
   )
 
-  const uploaded: UploadedImage[] = items.flatMap((i) =>
-    i.status === 'done' && i.key
-      ? [{ key: i.key, width: i.width, height: i.height }]
-      : [],
-  )
+  const uploaded: UploadedImage[] = items
+    .filter((i) => i.status === 'done')
+    .map((i) => ({ key: i.key, width: i.width, height: i.height }))
 
   return {
     items,
