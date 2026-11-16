@@ -18,6 +18,7 @@ import { Route as AuthSigninIndexRouteImport } from './routes/_auth/signin/index
 import { Route as AuthSignupIndexRouteImport } from './routes/_auth/signup/index'
 import { Route as AuthenticatedDashboardIndexRouteImport } from './routes/_authenticated/dashboard/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
+import { Route as ApiUploadIndexRouteImport } from './routes/api/upload/index'
 import { Route as AuthenticatedDashboardAccountIndexRouteImport } from './routes/_authenticated/dashboard/account/index'
 import { Route as AuthenticatedDashboardAllMediaIndexRouteImport } from './routes/_authenticated/dashboard/all-media/index'
 import { Route as AuthenticatedDashboardAvatarIndexRouteImport } from './routes/_authenticated/dashboard/avatar/index'
@@ -69,6 +70,11 @@ const AuthenticatedDashboardIndexRoute =
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiUploadIndexRoute = ApiUploadIndexRouteImport.update({
+  id: '/api/upload/',
+  path: '/api/upload/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedDashboardAccountIndexRoute =
@@ -127,6 +133,7 @@ export interface FileRoutesByFullPath {
   '/signin/': typeof AuthSigninIndexRoute
   '/signup/': typeof AuthSignupIndexRoute
   '/dashboard/': typeof AuthenticatedDashboardIndexRoute
+  '/api/upload/': typeof ApiUploadIndexRoute
   '/dashboard/account/': typeof AuthenticatedDashboardAccountIndexRoute
   '/dashboard/all-media/': typeof AuthenticatedDashboardAllMediaIndexRoute
   '/dashboard/avatar/': typeof AuthenticatedDashboardAvatarIndexRoute
@@ -142,6 +149,7 @@ export interface FileRoutesByTo {
   '/signin': typeof AuthSigninIndexRoute
   '/signup': typeof AuthSignupIndexRoute
   '/dashboard': typeof AuthenticatedDashboardIndexRoute
+  '/api/upload': typeof ApiUploadIndexRoute
   '/dashboard/account': typeof AuthenticatedDashboardAccountIndexRoute
   '/dashboard/all-media': typeof AuthenticatedDashboardAllMediaIndexRoute
   '/dashboard/avatar': typeof AuthenticatedDashboardAvatarIndexRoute
@@ -162,6 +170,7 @@ export interface FileRoutesById {
   '/_auth/signin/': typeof AuthSigninIndexRoute
   '/_auth/signup/': typeof AuthSignupIndexRoute
   '/_authenticated/dashboard/': typeof AuthenticatedDashboardIndexRoute
+  '/api/upload/': typeof ApiUploadIndexRoute
   '/_authenticated/dashboard/account/': typeof AuthenticatedDashboardAccountIndexRoute
   '/_authenticated/dashboard/all-media/': typeof AuthenticatedDashboardAllMediaIndexRoute
   '/_authenticated/dashboard/avatar/': typeof AuthenticatedDashboardAvatarIndexRoute
@@ -180,6 +189,7 @@ export interface FileRouteTypes {
     | '/signin/'
     | '/signup/'
     | '/dashboard/'
+    | '/api/upload/'
     | '/dashboard/account/'
     | '/dashboard/all-media/'
     | '/dashboard/avatar/'
@@ -195,6 +205,7 @@ export interface FileRouteTypes {
     | '/signin'
     | '/signup'
     | '/dashboard'
+    | '/api/upload'
     | '/dashboard/account'
     | '/dashboard/all-media'
     | '/dashboard/avatar'
@@ -214,6 +225,7 @@ export interface FileRouteTypes {
     | '/_auth/signin/'
     | '/_auth/signup/'
     | '/_authenticated/dashboard/'
+    | '/api/upload/'
     | '/_authenticated/dashboard/account/'
     | '/_authenticated/dashboard/all-media/'
     | '/_authenticated/dashboard/avatar/'
@@ -229,6 +241,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRouteWithChildren
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
+  ApiUploadIndexRoute: typeof ApiUploadIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -294,6 +307,13 @@ declare module '@tanstack/react-router' {
       path: '/api/auth/$'
       fullPath: '/api/auth/$'
       preLoaderRoute: typeof ApiAuthSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/upload/': {
+      id: '/api/upload/'
+      path: '/api/upload'
+      fullPath: '/api/upload/'
+      preLoaderRoute: typeof ApiUploadIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/dashboard/account/': {
@@ -435,6 +455,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRouteWithChildren,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
+  ApiUploadIndexRoute: ApiUploadIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -39,7 +39,10 @@ export function PromptComposer({
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
-  const attachments = useImageAttachments({})
+  const attachments = useImageAttachments({
+    userId: 'user-id-placeholder',
+    max: MAX_IMAGES,
+  })
   const { isDragging, dropProps } = useFileDrop({ onFiles: attachments.add })
 
   useImperativeHandle(
@@ -67,7 +70,7 @@ export function PromptComposer({
     if (!canSubmit) return
     onSubmit({
       prompt: prompt.trim(),
-      images: attachments.files,
+      images: attachments.uploaded,
       useAvatar,
       settings,
     })

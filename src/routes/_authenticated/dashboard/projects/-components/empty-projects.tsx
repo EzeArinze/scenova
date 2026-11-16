@@ -1,5 +1,7 @@
 import { motion } from 'motion/react'
 import { rise } from '#/utils/dashboard-contants'
+import { buttonVariants } from '#/components/ui/button'
+import { Link } from '@tanstack/react-router'
 
 export function ProjectEmpty() {
   return (
@@ -18,8 +20,17 @@ export function ProjectEmpty() {
         variants={rise}
         className="mt-2 text-center text-lg text-balance text-muted-foreground"
       >
-        Create an project to get started!
+        Create a project to get started!
       </motion.p>
+      {/* Create Project Button */}
+      <motion.div
+        variants={rise}
+        className="mt-6 flex items-center justify-center gap-4"
+      >
+        <Link to="/dashboard" className={buttonVariants({})}>
+          Create Project
+        </Link>
+      </motion.div>
     </section>
   )
 }
