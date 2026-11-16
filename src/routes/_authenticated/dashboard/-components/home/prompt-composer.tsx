@@ -1,6 +1,6 @@
 import { useEffect, useImperativeHandle, useRef, useState } from 'react'
 import type { KeyboardEvent } from 'react'
-import { ArrowRight, Check, Plus, X } from 'lucide-react'
+import { ArrowRight, Check, Plus } from 'lucide-react'
 import { cn } from 'cn'
 import {
   Popover,
@@ -22,11 +22,13 @@ import type {
   ComposerSettings,
   PromptComposerProps,
 } from './types-and-constants/types'
+import PromptComposerAttachmentLi from './prompt-composer-attachment-li'
 
 export function PromptComposer({
   onSubmit,
   disabled,
   ref,
+  userId,
 }: PromptComposerProps) {
   const [prompt, setPrompt] = useState('')
   const [useAvatar, setUseAvatar] = useState(false)
@@ -40,7 +42,7 @@ export function PromptComposer({
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const attachments = useImageAttachments({
-    userId: 'user-id-placeholder',
+    userId,
     max: MAX_IMAGES,
   })
   const { isDragging, dropProps } = useFileDrop({ onFiles: attachments.add })
@@ -63,8 +65,7 @@ export function PromptComposer({
     el.style.height = `${Math.min(el.scrollHeight, MAX_TEXTAREA_PX)}px`
   }, [prompt])
 
-  const canSubmit =
-    !disabled && prompt.trim().length > 0 && attachments.hasItems
+  const canSubmit = !disabled && prompt.trim().length > 0 && attachments.isReady
 
   function submit() {
     if (!canSubmit) return
@@ -105,24 +106,11 @@ export function PromptComposer({
         {attachments.items.length > 0 && (
           <ul className="flex flex-wrap gap-2 px-1 pb-2">
             {attachments.items.map((item) => (
-              <li key={item.id} className="relative">
-                <img
-                  src={item.url}
-                  alt={item.file.name}
-                  className="size-14 rounded-xl border border-border object-cover"
-                />
-                <button
-                  type="button"
-                  onClick={() => attachments.remove(item.id)}
-                  aria-label={`Remove ${item.file.name}`}
-                  className={cn(
-                    'absolute -top-1.5 -right-1.5 grid size-5 place-items-center rounded-full border border-border bg-background text-foreground transition-[scale] duration-150 active:scale-[0.92]',
-                    EASE,
-                  )}
-                >
-                  <X aria-hidden className="size-3" />
-                </button>
-              </li>
+              <PromptComposerAttachmentLi
+                key={item.id}
+                item={item}
+                attachments={attachments}
+              />
             ))}
           </ul>
         )}

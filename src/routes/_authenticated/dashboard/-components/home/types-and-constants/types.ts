@@ -25,4 +25,5 @@ export type PromptComposerProps = {
   onSubmit: (draft: ComposerValue) => void
   disabled?: boolean
   ref?: Ref<PromptComposerHandle>
+  userId: string
 }

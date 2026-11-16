@@ -1,4 +1,5 @@
 import { upload } from '@tigrisdata/storage/client'
+import { nanoid } from 'nanoid'
 
 const MULTIPART_THRESHOLD = 5 * 1024 * 1024
 
@@ -9,7 +10,7 @@ export async function uploadFile(
   userId: string,
   onProgress: (pct: number) => void,
 ) {
-  const key = `${userId}/${crypto.randomUUID()}-${safeName(file.name)}`
+  const key = `${userId}/${nanoid()}-${safeName(file.name)}`
 
   const result = await upload(key, file, {
     url: '/api/upload',
