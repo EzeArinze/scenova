@@ -3,6 +3,11 @@ import { discard } from '#/features/image-s3-actions.ts/remove-file'
 import { measureImage } from '#/utils/measure-image'
 import { nanoid } from 'nanoid'
 import { uploadFile } from '#/features/image-s3-actions.ts/upload-file'
+import {
+  isAllowedImageType,
+  makeUploadKey,
+  MAX_IMAGE_BYTES,
+} from '#/utils/projects-utils/image-rules'
 
 export type UploadedImage = { key: string; width?: number; height?: number }
 
@@ -18,10 +23,6 @@ export type Attachment = {
 }
 
 type Options = { userId: string; max?: number }
-
-const MAX_BYTES = 10 * 1024 * 1024
-
-const safeName = (name: string) => name.replace(/[^\w.-]+/g, '_').slice(-80)
 
 export function useImageAttachments({ userId, max = 4 }: Options) {
   const [items, setItems] = useState<Attachment[]>([])
@@ -67,20 +68,25 @@ export function useImageAttachments({ userId, max = 4 }: Options) {
 
   const add = useCallback(
     (list: FileList | File[]) => {
-      const images = Array.from(list).filter(
-        (f) => f.type.startsWith('image/') && f.size <= MAX_BYTES,
+      // Same type and size rules the server enforces (see #/lib/image-rules).
+      const images = Array.from(list).flatMap((file) =>
+        isAllowedImageType(file.type) && file.size <= MAX_IMAGE_BYTES
+          ? [{ file, type: file.type }]
+          : [],
       )
       const room = max - itemsRef.current.length
       if (!images.length || room <= 0) return
 
-      const next: Attachment[] = images.slice(0, room).map((file) => ({
-        id: nanoid(),
-        key: `${userId}/${nanoid()}-${safeName(file.name)}`,
-        file,
-        url: URL.createObjectURL(file),
-        status: 'uploading',
-        progress: 0,
-      }))
+      const next: Attachment[] = images
+        .slice(0, room)
+        .map(({ file, type }) => ({
+          id: nanoid(),
+          key: makeUploadKey(userId, nanoid(), type),
+          file,
+          url: URL.createObjectURL(file),
+          status: 'uploading',
+          progress: 0,
+        }))
       itemsRef.current = [...itemsRef.current, ...next]
       setItems((prev) => [...prev, ...next])
       next.forEach((item) => void start(item))
@@ -96,8 +102,6 @@ export function useImageAttachments({ userId, max = 4 }: Options) {
     itemsRef.current = itemsRef.current.filter((i) => i.id !== id)
     setItems((prev) => prev.filter((i) => i.id !== id))
 
-    // Only a finished upload exists in Tigris yet. An in-flight one is
-    // cleaned up by `start` when it finishes (see above).
     if (target.status === 'done') discard(target.key)
   }, [])
 

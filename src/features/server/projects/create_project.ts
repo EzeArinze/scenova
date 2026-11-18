@@ -1,12 +1,15 @@
 import { UnauthorizedMiddleware } from '#/middleware/middleware'
 import { createServerFn } from '@tanstack/react-start'
-import { head } from '@tigrisdata/storage'
+import { head, remove } from '@tigrisdata/storage'
 import z from 'zod'
 import { imageSchema, settingsSchema } from './schema'
 import db from '#/db'
 import { asset, project, type NewAsset } from '#/db/schema'
-
-const MAX_IMAGE_BYTES = 10 * 1024 * 1024
+import {
+  isAllowedImageType,
+  isValidUploadKey,
+  MAX_IMAGE_BYTES,
+} from '#/utils/projects-utils/image-rules'
 
 export const createProjectSchema = z.object({
   brief: z.string().trim().max(2000).default(''),
@@ -20,33 +23,35 @@ export const createProject = createServerFn({ method: 'POST' })
   .validator(createProjectSchema)
   .handler(async ({ data, context }) => {
     const userId = context.user.id
-    const prefix = `${userId}/`
+
+    if (data.mode !== 'template' && data.images.length === 0) {
+      throw new Error('Add a product photo to continue')
+    }
 
     const keys = data.images.map((i) => i.key)
     if (new Set(keys).size !== keys.length) {
       throw new Error('Duplicate file')
     }
-    if (keys.some((key) => !key.startsWith(prefix))) {
+    if (keys.some((key) => !isValidUploadKey(key, userId))) {
       throw new Error('Invalid file')
     }
 
-    // 2. Ask Tigris what actually exists. Never trust size or type from the client.
-    //    Done outside the transaction so network calls don't hold a db connection.
     const verified = await Promise.all(
       data.images.map(async (img) => {
         const { data: meta, error } = await head(img.key)
         if (error || !meta) throw new Error('Upload not found')
         if (
-          !meta.contentType?.startsWith('image/') ||
+          !isAllowedImageType(meta.contentType) ||
           meta.size > MAX_IMAGE_BYTES
         ) {
+          await remove(img.key).catch(() => undefined)
           throw new Error('Invalid file')
         }
         return { ...img, mime: meta.contentType, bytes: meta.size }
       }),
     )
 
-    // 3. Project and assets succeed or fail together.
+    // Project and assets succeed or fail together.
     const title = data.brief ? data.brief.slice(0, 48) : 'Untitled ad'
 
     return db.transaction(async (tx) => {
