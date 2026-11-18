@@ -36,7 +36,7 @@ export function PromptComposer({
   const [settings, setSettings] = useState<ComposerSettings>({
     ratio: '9:16',
     seconds: 8,
-    variations: 2,
+    variations: 1,
   })
 
   const textareaRef = useRef<HTMLTextAreaElement>(null)
@@ -66,7 +66,12 @@ export function PromptComposer({
     el.style.height = `${Math.min(el.scrollHeight, MAX_TEXTAREA_PX)}px`
   }, [prompt])
 
-  const canSubmit = !disabled && prompt.trim().length > 0 && attachments.isReady
+  const hasUploadError = attachments.items.some((i) => i.status === 'error')
+  const canSubmit =
+    !disabled &&
+    !attachments.isUploading &&
+    !hasUploadError &&
+    (prompt.trim().length > 0 || attachments.hasItems)
 
   function submit() {
     if (!canSubmit) return

@@ -1,9 +1,16 @@
 import { queryOptions } from '@tanstack/react-query'
-import { getProject, listPresenters } from '../server/projects/get_projects'
+import {
+  getProject,
+  getProjectPhotos,
+  listPresenters,
+} from '../server/projects/get_projects'
+
+const PHOTO_STALE_MS = 45 * 60 * 1000
 
 export const projectKeys = {
   all: ['projects'] as const,
   detail: (id: string) => ['projects', 'detail', id] as const,
+  photos: (id: string) => ['projects', 'photos', id] as const,
   presenters: ['presenters'] as const,
 }
 
@@ -13,7 +20,15 @@ export const projectQuery = (id: string) =>
     queryFn: () => getProject({ data: { id } }),
     refetchInterval: (query) =>
       query.state.data?.project.status === 'drafting' ? 3000 : false,
-    retry: false, // a wrong id should show "not found" at once, not after retries
+    retry: false,
+  })
+
+export const projectPhotosQuery = (id: string) =>
+  queryOptions({
+    queryKey: projectKeys.photos(id),
+    queryFn: () => getProjectPhotos({ data: { id } }),
+    staleTime: PHOTO_STALE_MS,
+    refetchOnWindowFocus: false,
   })
 
 export const presentersQuery = () =>
@@ -21,4 +36,5 @@ export const presentersQuery = () =>
     queryKey: projectKeys.presenters,
     queryFn: () => listPresenters(),
     staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
   })

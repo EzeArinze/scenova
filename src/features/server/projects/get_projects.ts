@@ -2,6 +2,9 @@ import { createServerFn } from '@tanstack/react-start'
 import db from '#/db'
 import { UnauthorizedMiddleware } from '#/middleware/middleware'
 import { id } from './schema'
+import { getPresignedUrl } from '@tigrisdata/storage'
+
+const PHOTO_URL_SECONDS = 60 * 60
 
 export const getProject = createServerFn({ method: 'GET' })
   .middleware([UnauthorizedMiddleware])
@@ -23,6 +26,37 @@ export const getProject = createServerFn({ method: 'GET' })
     return { project: p, scenes }
   })
 
+export const getProjectPhotos = createServerFn({ method: 'GET' })
+  .middleware([UnauthorizedMiddleware])
+  .validator(id)
+  .handler(async ({ data, context }) => {
+    const userId = context.user.id
+
+    const rows = await db.query.asset.findMany({
+      where: (a, { and, eq, isNull }) =>
+        and(
+          eq(a.projectId, data.id),
+          eq(a.userId, userId),
+          eq(a.kind, 'source_photo'),
+          eq(a.status, 'ready'),
+          isNull(a.deletedAt),
+        ),
+      orderBy: (a, { asc }) => asc(a.position),
+    })
+
+    // A photo that fails to sign is left out instead of failing the page.
+    const photos = await Promise.all(
+      rows.map(async (a) => {
+        const { data: signed, error } = await getPresignedUrl(a.storageKey, {
+          operation: 'get',
+          expiresIn: PHOTO_URL_SECONDS,
+        })
+        if (error || !signed) return null
+        return { id: a.id, url: signed.url, width: a.width, height: a.height }
+      }),
+    )
+    return photos.filter((p): p is NonNullable<typeof p> => p !== null)
+  })
 /** Built-in avatars (userId null) plus the user's own. */
 export const listPresenters = createServerFn({ method: 'GET' })
   .middleware([UnauthorizedMiddleware])
