@@ -19,7 +19,7 @@ export const projectQuery = (id: string) =>
     queryKey: projectKeys.detail(id),
     queryFn: () => getProject({ data: { id } }),
     refetchInterval: (query) =>
-      query.state.data?.project.status === 'drafting' ? 3000 : false,
+      query.state.data?.project.status === 'drafting' ? 6000 : false,
     retry: false,
   })
 

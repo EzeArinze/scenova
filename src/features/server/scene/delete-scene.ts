@@ -3,15 +3,15 @@ import { project, scene } from '#/db/schema'
 import { UnauthorizedMiddleware } from '#/middleware/middleware'
 import { createServerFn } from '@tanstack/react-start'
 import { eq, inArray } from 'drizzle-orm'
-import z from 'zod'
 import { requireScene } from '..'
+import { sceneId } from './schema'
 
 export const deleteScene = createServerFn({ method: 'POST' })
   .middleware([UnauthorizedMiddleware])
-  .validator(z.object({ id: z.string().uuid() }))
+  .validator(sceneId)
   .handler(async ({ data, context }) => {
     await db.transaction(async (tx) => {
-      const s = await requireScene(data.id, context.user.id)
+      const s = await requireScene(data.sceneId, context.user.id)
 
       if (!s) throw new Error('Scene not found')
 

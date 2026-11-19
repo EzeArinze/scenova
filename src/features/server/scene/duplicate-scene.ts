@@ -4,16 +4,16 @@ import { MAX_SCENES } from '..'
 import db from '#/db'
 import { scene } from '#/db/schema'
 import { and, eq, sql } from 'drizzle-orm'
-import z from 'zod'
 import { lockProjectByScene } from '../helpers'
+import { sceneId } from './schema'
 
 export const duplicateScene = createServerFn({ method: 'POST' })
   .middleware([UnauthorizedMiddleware])
-  .validator(z.object({ id: z.string().uuid() }))
+  .validator(sceneId)
   .handler(async ({ data, context }) => {
     return db.transaction(async (tx) => {
       // 1. Lock the owning project, check ownership + not trashed, bump updatedAt.
-      const p = await lockProjectByScene(tx, data.id, context.user.id)
+      const p = await lockProjectByScene(tx, data.sceneId, context.user.id)
 
       // 2. Fresh read of the scene plus the scene count, in one query.
       const [s] = await tx
@@ -27,7 +27,7 @@ export const duplicateScene = createServerFn({ method: 'POST' })
           total: tx.$count(scene, eq(scene.projectId, p.id)),
         })
         .from(scene)
-        .where(eq(scene.id, data.id))
+        .where(eq(scene.id, data.sceneId))
 
       if (!s) throw new Error('Scene not found')
       if (s.total >= MAX_SCENES) {
