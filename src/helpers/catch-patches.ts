@@ -2,7 +2,7 @@
 // the screen reacts at once. If the save fails the hook puts the old data back;
 // when the last save settles, the server's answer replaces all of this.
 
-import type { getProject } from '#/features/server/projects/get_projects'
+import type { getProject } from '#/features/server/projects/get_project'
 import { MAX_SCENE_SECONDS, MIN_SCENE_SECONDS } from '#/utils/projects'
 
 export type ProjectData = Awaited<ReturnType<typeof getProject>>

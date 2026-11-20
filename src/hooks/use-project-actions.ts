@@ -18,7 +18,7 @@ import { addScene } from '#/features/server/scene/add-scene'
 import {
   setProjectPresenter,
   updateProjectAnalysis,
-} from '#/features/server/projects/update_projects'
+} from '#/features/server/projects/update_project'
 import { toast } from '#/components/ui/toast'
 
 type Answers = {

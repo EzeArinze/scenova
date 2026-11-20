@@ -3,7 +3,7 @@ import {
   getProject,
   getProjectPhotos,
   listPresenters,
-} from '../server/projects/get_projects'
+} from '../server/projects/get_project'
 
 const PHOTO_STALE_MS = 45 * 60 * 1000
 
