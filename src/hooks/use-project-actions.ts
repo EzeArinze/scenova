@@ -19,6 +19,7 @@ import {
   setProjectPresenter,
   updateProjectAnalysis,
 } from '#/features/server/projects/update_projects'
+import { toast } from '#/components/ui/toast'
 
 type Answers = {
   platform?: Platform | null
@@ -60,6 +61,7 @@ function useEdit<V>(
     },
     onError: (error, _vars, context) => {
       if (context?.previous) qc.setQueryData(queryKey, context.previous)
+      toast.add({ type: 'error', description: error.message })
       reportEditError(error)
     },
     onSettled: () => {
