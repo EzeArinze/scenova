@@ -3,12 +3,12 @@ import { motion } from 'motion/react'
 import { Check } from 'lucide-react'
 import type { Project } from '#/types/project-types'
 import { PageHeading, ProjectGrid } from './project-grid'
-import { projectApi } from '#/utils/projects-utils/mock-api'
+import { projectApi } from '#/utils/projects/mock-api'
 import { EASE_OUT, rise, stagger } from '#/utils/dashboard-contants'
 import { SceneStill } from './scene-still'
 import { ChipGroup } from './chip-group'
 import { BriefCard, GenerateCard } from './side-panel'
-import { PLATFORMS, TONES } from '#/utils/projects-utils/constants'
+import { PLATFORMS, TONES } from '#/utils/projects/constants'
 
 /** Shown right after Send, while the storyboard is being written. */
 export function DraftingView({ project }: { project: Project }) {

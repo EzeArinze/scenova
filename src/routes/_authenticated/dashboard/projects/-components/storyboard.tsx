@@ -1,28 +1,36 @@
 import { AnimatePresence, motion } from 'motion/react'
 import { Plus } from 'lucide-react'
-import { creditsFor, formatTime } from '#/utils/projects-utils'
+import { creditsFor, formatTime } from '#/utils/projects'
 import { PageHeading, ProjectGrid } from './project-grid'
-import {
-  projectApi,
-  SUGGESTED_PRESENTERS,
-} from '#/utils/projects-utils/mock-api'
-import type { Project } from '#/types/project-types'
+import { useProjectActions } from '#/hooks/use-project-actions'
+import type { Presenter, Project } from '#/types/project-types'
 import { rise, stagger } from '#/utils/dashboard-contants'
 import { PresenterPicker } from './presenter-picker'
 import { SceneCard } from './scene-card'
 import { BriefCard, FormatCard, GenerateCard } from './side-panel'
 
+/** How many suggested presenters to show before "Browse all" exists. */
+const SUGGESTED_COUNT = 3
+
 /** The editable plan, shown once drafting has finished. */
 export function StoryboardView({
   project,
+  presenters,
   onGenerate,
 }: {
   project: Project
+  presenters: Presenter[]
   onGenerate: () => void
 }) {
-  const { scenes, id } = project
-  const presenter =
-    SUGGESTED_PRESENTERS.find((p) => p.id === project.presenterId) ?? null
+  const { scenes } = project
+  const api = useProjectActions(project.id)
+  const presenter = presenters.find((p) => p.id === project.presenterId) ?? null
+  // A few suggestions, plus the chosen one if it is further down the list.
+  const suggested = presenters.slice(0, SUGGESTED_COUNT)
+  const presenterOptions =
+    presenter && !suggested.includes(presenter)
+      ? [...suggested, presenter]
+      : suggested
   const totalSeconds = scenes.reduce((sum, s) => sum + s.seconds, 0)
   const credits = creditsFor(totalSeconds, project.versions)
   const showPresenterPicker = project.mode === 'ugc'
@@ -56,11 +64,9 @@ export function StoryboardView({
                   </span>
                 </div>
                 <PresenterPicker
-                  options={SUGGESTED_PRESENTERS}
+                  options={presenterOptions}
                   value={project.presenterId}
-                  onChange={(presenterId) =>
-                    projectApi.setPresenter(id, presenterId)
-                  }
+                  onChange={api.setPresenter}
                   // TODO: pass onBrowse once the Avatars library page exists.
                 />
               </motion.section>
@@ -77,7 +83,7 @@ export function StoryboardView({
                 </h2>
                 <button
                   type="button"
-                  onClick={() => projectApi.addScene(id)}
+                  onClick={api.addScene}
                   className="inline-flex h-11 items-center gap-2 rounded-full border border-border px-4 text-[13px] font-semibold transition-[scale] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.97]"
                 >
                   <Plus aria-hidden className="size-4" />
@@ -99,20 +105,13 @@ export function StoryboardView({
                       canMoveUp={i > 0}
                       canMoveDown={i < scenes.length - 1}
                       canDelete={scenes.length > 1}
-                      onSeconds={(s) =>
-                        projectApi.setSceneSeconds(id, scene.id, s)
-                      }
-                      onMove={(d) => projectApi.moveScene(id, scene.id, d)}
-                      onDuplicate={() =>
-                        projectApi.duplicateScene(id, scene.id)
-                      }
-                      onDelete={() => projectApi.deleteScene(id, scene.id)}
-                      onLine={(line) =>
-                        projectApi.setSceneLine(id, scene.id, line)
-                      }
-                      onChangeRequest={(text) =>
-                        projectApi.requestSceneChange(id, scene.id, text)
-                      }
+                      onSeconds={(s) => api.setSceneSeconds(scene.id, s)}
+                      onMove={(d) => api.moveScene(scene.id, d)}
+                      onDuplicate={() => api.duplicateScene(scene.id)}
+                      onDelete={() => api.deleteScene(scene.id)}
+                      onLine={(line) => api.setSceneLine(scene.id, line)}
+                      // onChangeRequest comes with the AI step; until then the
+                      // "Change this scene" box is shown disabled.
                     />
                   ))}
                 </AnimatePresence>

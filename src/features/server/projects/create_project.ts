@@ -9,7 +9,7 @@ import {
   isAllowedImageType,
   isValidUploadKey,
   MAX_IMAGE_BYTES,
-} from '#/utils/projects-utils/image-rules'
+} from '#/utils/projects/image-rules'
 
 export const createProjectSchema = z.object({
   brief: z.string().trim().max(2000).default(''),

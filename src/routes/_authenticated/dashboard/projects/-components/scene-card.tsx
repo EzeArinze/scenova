@@ -13,7 +13,7 @@ import {
 } from 'lucide-react'
 import type { Scene } from '#/types/project-types'
 import { EASE_OUT } from '#/utils/dashboard-contants'
-import { MAX_SCENE_SECONDS, MIN_SCENE_SECONDS } from '#/utils/projects-utils'
+import { MAX_SCENE_SECONDS, MIN_SCENE_SECONDS } from '#/utils/projects'
 import { IconButton } from '../../-components/icon-button'
 import { SceneStill } from './scene-still'
 
@@ -31,7 +31,8 @@ type SceneCardProps = {
   onDuplicate: () => void
   onDelete: () => void
   onLine: (line: string) => void
-  onChangeRequest: (instruction: string) => void
+  /** Missing until AI rewriting exists: the box is then shown disabled. */
+  onChangeRequest?: (instruction: string) => void
 }
 
 export function SceneCard({
@@ -57,7 +58,7 @@ export function SceneCard({
   function submitChange(e: FormEvent) {
     e.preventDefault()
     const text = instruction.trim()
-    if (!text || scene.updating) return
+    if (!text || scene.updating || !onChangeRequest) return
     onChangeRequest(text)
     setInstruction('')
   }
@@ -197,15 +198,19 @@ export function SceneCard({
               type="text"
               value={instruction}
               onChange={(e) => setInstruction(e.target.value)}
-              disabled={scene.updating}
-              placeholder="Change this scene… e.g. make it funnier"
+              disabled={scene.updating || !onChangeRequest}
+              placeholder={
+                onChangeRequest
+                  ? 'Change this scene… e.g. make it funnier'
+                  : 'Rewriting with AI is coming soon'
+              }
               className="h-11 w-full rounded-xl border border-border bg-background px-3.5 text-base outline-none placeholder:text-muted-foreground focus-visible:border-foreground/25 md:text-sm"
             />
           </label>
           <IconButton
             type="submit"
             aria-label={`Apply change to scene ${n}`}
-            disabled={!instruction.trim() || scene.updating}
+            disabled={!instruction.trim() || scene.updating || !onChangeRequest}
             className="bg-primary/20 text-primary"
           >
             <ArrowRight aria-hidden className="size-4" />

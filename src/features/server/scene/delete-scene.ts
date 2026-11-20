@@ -15,15 +15,6 @@ export const deleteScene = createServerFn({ method: 'POST' })
 
       if (!s) throw new Error('Scene not found')
 
-      // // 2. Delete the scene.
-      // await tx.delete(scene).where(eq(scene.id, s.id))
-
-      // // 3. Update the parent project.
-      // await tx
-      //   .update(project)
-      //   .set({ updatedAt: new Date() })
-      //   .where(eq(project.id, s.projectId))
-
       // one round trip for delete and parents update to the db
       const deleted = tx
         .$with('deleted')

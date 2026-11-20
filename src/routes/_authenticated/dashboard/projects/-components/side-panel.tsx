@@ -1,5 +1,5 @@
 import type { Presenter, Project } from '#/types/project-types'
-import { formatTime } from '#/utils/projects-utils'
+import { formatTime } from '#/utils/projects'
 import { ShieldCheck, Sparkles } from 'lucide-react'
 
 const PLATFORM_LABEL = {

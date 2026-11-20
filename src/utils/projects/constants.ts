@@ -13,3 +13,12 @@ export const TONES: { value: Tone; label: string }[] = [
   { value: 'premium', label: 'Calm and premium' },
   { value: 'funny', label: 'Funny' },
 ]
+
+export const PLATFORM_VALUES = [
+  'tiktok',
+  'reels',
+  'shorts',
+  'instagram',
+] as const
+
+export const TONE_VALUES = ['casual', 'energetic', 'premium', 'funny'] as const

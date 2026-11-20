@@ -7,7 +7,7 @@ import {
   isAllowedImageType,
   makeUploadKey,
   MAX_IMAGE_BYTES,
-} from '#/utils/projects-utils/image-rules'
+} from '#/utils/projects/image-rules'
 
 export type UploadedImage = { key: string; width?: number; height?: number }
 

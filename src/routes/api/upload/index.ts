@@ -21,7 +21,7 @@
 // })
 
 import { apiMiddleware } from '#/middleware/middleware'
-import { isValidUploadKey } from '#/utils/projects-utils/image-rules'
+import { isValidUploadKey } from '#/utils/projects/image-rules'
 import { createFileRoute } from '@tanstack/react-router'
 import { handleClientUpload } from '@tigrisdata/storage'
 import z from 'zod'

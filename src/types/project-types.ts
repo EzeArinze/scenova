@@ -45,6 +45,7 @@ export type Presenter = {
   vibe: string
   /** CSS gradient used until real avatar portraits exist. */
   gradient: string
+  imageUrl: string | null
 }
 
 export type Project = {
