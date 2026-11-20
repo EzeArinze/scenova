@@ -12,10 +12,8 @@ export function PresenterPicker({
   onBrowse,
 }: {
   options: Presenter[]
-  /** Null means no presenter. */
   value: string | null
   onChange: (id: string | null) => void
-  /** Opens the full Avatars library. Hidden until that exists. */
   onBrowse?: () => void
 }) {
   return (
@@ -36,19 +34,32 @@ export function PresenterPicker({
                 : 'border-border',
             )}
           >
-            <span
-              aria-hidden
-              className="relative block size-18 overflow-hidden rounded-full"
-              style={{ background: p.gradient }}
-            >
-              <svg viewBox="0 0 72 72" className="absolute inset-0 size-full">
-                <circle cx="36" cy="28" r="12" fill="rgba(255,255,255,0.88)" />
-                <path
-                  d="M10 72C10 50 62 50 62 72Z"
-                  fill="rgba(255,255,255,0.88)"
-                />
-              </svg>
-            </span>
+            {p.imageUrl ? (
+              <img
+                src={p.imageUrl}
+                alt=""
+                className="block size-18 rounded-full object-cover"
+              />
+            ) : (
+              <span
+                aria-hidden
+                className="relative block size-18 overflow-hidden rounded-full"
+                style={{ background: p.gradient }}
+              >
+                <svg viewBox="0 0 72 72" className="absolute inset-0 size-full">
+                  <circle
+                    cx="36"
+                    cy="28"
+                    r="12"
+                    fill="rgba(255,255,255,0.88)"
+                  />
+                  <path
+                    d="M10 72C10 50 62 50 62 72Z"
+                    fill="rgba(255,255,255,0.88)"
+                  />
+                </svg>
+              </span>
+            )}
             {selected && (
               <span className="absolute top-2.5 right-2.5 grid size-5.5 place-items-center rounded-full bg-primary text-primary-foreground">
                 <Check aria-hidden className="size-3" />

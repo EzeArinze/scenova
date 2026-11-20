@@ -1,10 +1,19 @@
 import { createServerFn } from '@tanstack/react-start'
+import { getPresignedUrl } from '@tigrisdata/storage'
 import db from '#/db'
 import { UnauthorizedMiddleware } from '#/middleware/middleware'
 import { id } from './schema'
-import { getPresignedUrl } from '@tigrisdata/storage'
 
-const PHOTO_URL_SECONDS = 60 * 60
+const READ_URL_SECONDS = 60 * 60
+
+/** Signed read URL for a private object, or null if it cannot be signed. */
+async function signRead(storageKey: string) {
+  const { data, error } = await getPresignedUrl(storageKey, {
+    operation: 'get',
+    expiresIn: READ_URL_SECONDS,
+  })
+  return error || !data ? null : data.url
+}
 
 export const getProject = createServerFn({ method: 'GET' })
   .middleware([UnauthorizedMiddleware])
@@ -47,26 +56,29 @@ export const getProjectPhotos = createServerFn({ method: 'GET' })
     // A photo that fails to sign is left out instead of failing the page.
     const photos = await Promise.all(
       rows.map(async (a) => {
-        const { data: signed, error } = await getPresignedUrl(a.storageKey, {
-          operation: 'get',
-          expiresIn: PHOTO_URL_SECONDS,
-        })
-        if (error || !signed) return null
-        return { id: a.id, url: signed.url, width: a.width, height: a.height }
+        const url = await signRead(a.storageKey)
+        return url ? { id: a.id, url, width: a.width, height: a.height } : null
       }),
     )
     return photos.filter((p): p is NonNullable<typeof p> => p !== null)
   })
-/** Built-in avatars (userId null) plus the user's own. */
+
 export const listPresenters = createServerFn({ method: 'GET' })
   .middleware([UnauthorizedMiddleware])
   .handler(async ({ context }) => {
     const { id } = context.user
 
-    const presenters = await db.query.presenter.findMany({
+    const rows = await db.query.presenter.findMany({
       where: (p, { or, isNull, eq }) => or(isNull(p.userId), eq(p.userId, id)),
       orderBy: (p, { asc }) => asc(p.createdAt),
     })
 
-    return presenters
+    return Promise.all(
+      rows.map(async (r) => ({
+        id: r.id,
+        name: r.name,
+        description: r.description,
+        imageUrl: await signRead(r.storageKey),
+      })),
+    )
   })

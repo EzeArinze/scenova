@@ -1,4 +1,5 @@
 import {
+  presentersQuery,
   projectPhotosQuery,
   projectQuery,
 } from '#/features/querries.ts/project-querries'
@@ -17,6 +18,7 @@ export const Route = createFileRoute(
     void context.queryClient
       .query(projectPhotosQuery(params.project_id))
       .catch(noop)
+    void context.queryClient.prefetchQuery(presentersQuery()).catch(noop)
   },
   component: RouteComponent,
   errorComponent: ProjectError,

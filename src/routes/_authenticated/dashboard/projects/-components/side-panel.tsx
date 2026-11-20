@@ -138,11 +138,19 @@ export function GenerateCard({
         </div>
         {presenter && (
           <div className="flex items-center gap-2 text-[13px] text-foreground/90">
-            <span
-              aria-hidden
-              className="size-5.5 rounded-full"
-              style={{ background: presenter.gradient }}
-            />
+            {presenter.imageUrl ? (
+              <img
+                src={presenter.imageUrl}
+                alt=""
+                className="size-5.5 rounded-full object-cover"
+              />
+            ) : (
+              <span
+                aria-hidden
+                className="size-5.5 rounded-full"
+                style={{ background: presenter.gradient }}
+              />
+            )}
             {presenter.name} presents
           </div>
         )}

@@ -20,6 +20,14 @@ import {
   updateProjectAnalysis,
 } from '#/features/server/projects/update_projects'
 
+type Answers = {
+  platform?: Platform | null
+  tone?: Tone | null
+  questionsDone?: boolean
+  productName?: string
+  confirmed?: boolean
+}
+
 // Swap this for your toast (#/components/ui/toast); I have not seen its API.
 // A failed save has already been rolled back on screen by the time it runs.
 function reportEditError(error: unknown) {
@@ -97,13 +105,6 @@ export function useProjectActions(projectId: string) {
     addScene({ data: { projectId } }),
   )
 
-  type Answers = {
-    platform?: Platform | null
-    tone?: Tone | null
-    questionsDone?: boolean
-    productName?: string
-    confirmed?: boolean
-  }
   const analysis = useEdit(
     projectId,
     (v: Answers) => updateProjectAnalysis({ data: { projectId, ...v } }),

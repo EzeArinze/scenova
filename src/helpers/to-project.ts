@@ -1,8 +1,3 @@
-// Maps what the server returns (database rows) onto the types the storyboard
-// screens were built against, so those screens can be reused as they are. The
-// input types below are deliberately plain: they describe only the fields read
-// here, and a Drizzle row satisfies them.
-
 import type {
   Platform,
   Presenter,

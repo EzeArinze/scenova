@@ -2,17 +2,25 @@ import { useMemo } from 'react'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { MotionConfig } from 'motion/react'
 import {
+  presentersQuery,
   projectPhotosQuery,
   projectQuery,
 } from '#/features/querries.ts/project-querries'
 import { ProjectHeader } from './project-header'
 import { DraftingView } from './drafting-view'
 import { StoryboardView } from './storyboard'
+import { toPresenterView } from '#/helpers/to-project'
 import { toProjectView } from '#/features/server/helpers'
 
 export default function ProjectView({ project_id }: { project_id: string }) {
   const { data } = useSuspenseQuery(projectQuery(project_id))
   const { data: photos } = useSuspenseQuery(projectPhotosQuery(project_id))
+  const { data: presenterRows } = useSuspenseQuery(presentersQuery())
+
+  const presenters = useMemo(
+    () => presenterRows.map(toPresenterView),
+    [presenterRows],
+  )
 
   const project = useMemo(
     () =>
@@ -56,6 +64,7 @@ export default function ProjectView({ project_id }: { project_id: string }) {
           <StoryboardView
             key="ready"
             project={project}
+            presenters={presenters}
             onGenerate={handleGenerate}
           />
         )}

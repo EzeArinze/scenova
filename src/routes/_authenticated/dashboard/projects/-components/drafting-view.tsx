@@ -3,7 +3,7 @@ import { motion } from 'motion/react'
 import { Check } from 'lucide-react'
 import type { Project } from '#/types/project-types'
 import { PageHeading, ProjectGrid } from './project-grid'
-import { projectApi } from '#/utils/projects/mock-api'
+import { useProjectActions } from '#/hooks/use-project-actions'
 import { EASE_OUT, rise, stagger } from '#/utils/dashboard-contants'
 import { SceneStill } from './scene-still'
 import { ChipGroup } from './chip-group'
@@ -13,6 +13,7 @@ import { PLATFORMS, TONES } from '#/utils/projects/constants'
 /** Shown right after Send, while the storyboard is being written. */
 export function DraftingView({ project }: { project: Project }) {
   const { analysis, brief, scenes, plannedScenes } = project
+  const api = useProjectActions(project.id)
   const [correcting, setCorrecting] = useState(false)
   const [nameDraft, setNameDraft] = useState('')
   const anyAnswer = brief.platform !== null || brief.tone !== null
@@ -21,10 +22,7 @@ export function DraftingView({ project }: { project: Project }) {
   function saveCorrection() {
     const name = nameDraft.trim()
     if (!name) return
-    projectApi.updateAnalysis(project.id, {
-      productName: name,
-      confirmed: true,
-    })
+    api.updateAnalysis({ productName: name, confirmed: true })
     setCorrecting(false)
   }
 
@@ -77,11 +75,7 @@ export function DraftingView({ project }: { project: Project }) {
                   <div className="flex flex-wrap gap-2">
                     <button
                       type="button"
-                      onClick={() =>
-                        projectApi.updateAnalysis(project.id, {
-                          confirmed: true,
-                        })
-                      }
+                      onClick={() => api.updateAnalysis({ confirmed: true })}
                       className="h-11 rounded-full bg-primary px-4.5 text-sm font-bold text-primary-foreground transition-[scale] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.97]"
                     >
                       Yes, that's it
@@ -150,11 +144,7 @@ export function DraftingView({ project }: { project: Project }) {
                   <h2 className="text-base font-bold">Two quick questions</h2>
                   <button
                     type="button"
-                    onClick={() =>
-                      projectApi.updateBrief(project.id, {
-                        questionsDone: true,
-                      })
-                    }
+                    onClick={() => api.updateBrief({ questionsDone: true })}
                     className="min-h-11 text-[13px] font-semibold text-primary"
                   >
                     {anyAnswer ? 'Done' : 'Skip, surprise me'}
@@ -164,17 +154,13 @@ export function DraftingView({ project }: { project: Project }) {
                   label="Where will this ad run?"
                   value={brief.platform}
                   options={PLATFORMS}
-                  onChange={(platform) =>
-                    projectApi.updateBrief(project.id, { platform })
-                  }
+                  onChange={(platform) => api.updateBrief({ platform })}
                 />
                 <ChipGroup
                   label="What should it feel like?"
                   value={brief.tone}
                   options={TONES}
-                  onChange={(tone) =>
-                    projectApi.updateBrief(project.id, { tone })
-                  }
+                  onChange={(tone) => api.updateBrief({ tone })}
                 />
               </motion.section>
             )}
